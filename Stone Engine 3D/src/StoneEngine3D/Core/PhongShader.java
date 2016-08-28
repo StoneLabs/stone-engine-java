@@ -51,6 +51,7 @@ public class PhongShader extends Shader
 			addUniform("pointLights["+i+"].atten.linear");
 			addUniform("pointLights["+i+"].atten.exponent");
 			addUniform("pointLights["+i+"].position");
+			addUniform("pointLights["+i+"].range");
 		}
 	}
 	
@@ -110,8 +111,9 @@ public class PhongShader extends Shader
 	{
 		setUniform(uniformName + ".base", pointLight.getBaseLight());
 		setUniform(uniformName + ".position", pointLight.getPosition());
-		setUniformf(uniformName + ".atten.constant", pointLight.getAtten().getConstant());
+		setUniformf(uniformName + ".range", pointLight.getRange());
 		setUniformf(uniformName + ".atten.linear", pointLight.getAtten().getLinear());
+		setUniformf(uniformName + ".atten.constant", pointLight.getAtten().getConstant());
 		setUniformf(uniformName + ".atten.exponent", pointLight.getAtten().getExponent());
 	}
 

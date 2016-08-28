@@ -10,8 +10,8 @@ public class Game
 
 	private Camera camera;
 
-	PointLight pLight1 = new PointLight(new BaseLight(new Vector3f(1,0,0), 0.8f), new Attenuation(0, 0, 1), new Vector3f(-2,0,5));
-	PointLight pLight2 = new PointLight(new BaseLight(new Vector3f(0,0,1), 0.8f), new Attenuation(0, 0, 1), new Vector3f(2,0,7));
+	PointLight pLight1 = new PointLight(new BaseLight(new Vector3f(1,0,0), 0.8f), new Attenuation(0, 0, 1), new Vector3f(-2,2,5),10);
+	PointLight pLight2 = new PointLight(new BaseLight(new Vector3f(0,0,1), 0.8f), new Attenuation(0, 0, 1), new Vector3f(2,2,7),10);
 	
 	public Game()
 	{
@@ -20,7 +20,7 @@ public class Game
 		material = new Material(
 				ResourceLoader.loadTexture("test.png"),
 				new Vector3f(1,1,1),
-				1.0f, 4
+				0.4f, 8
 				);
 		shader = PhongShader.getInstance();
 		camera = new Camera();
@@ -54,8 +54,8 @@ public class Game
 		Transform.setProjection(70f, MainComponent.WIDTH, MainComponent.HEIGHT, 0.1f, 1000f);
 		Transform.setCamera(camera);
 		
-		PhongShader.setAmbientLight(new Vector3f(0.2f,0.2f,0.2f));
-		PhongShader.setDirectionalLight(new DirectionalLight(new BaseLight(new Vector3f(1,1,1), 0.1f), new Vector3f(1,1,1)));
+		PhongShader.setAmbientLight(new Vector3f(0.0f,0.0f,0.0f));
+		PhongShader.setDirectionalLight(new DirectionalLight(new BaseLight(new Vector3f(1f,1f,1f), 0.4f), new Vector3f(1,1,1)));
 		
 		
 		PhongShader.setPointLights(new PointLight[] {pLight1, pLight2});
