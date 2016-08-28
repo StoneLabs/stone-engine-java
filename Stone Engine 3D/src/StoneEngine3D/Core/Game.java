@@ -14,10 +14,11 @@ public class Game
 	
 	public Game()
 	{
-		mesh = ResourceLoader.loadMesh("cube.obj");
+//		mesh = new Mesh();
+		mesh = ResourceLoader.loadMesh("monkey.obj");
 		material = new Material(
-				ResourceLoader.loadTexture("test.png"),
-				new Vector3f(0,1,1)
+				ResourceLoader.loadTexture("white_pixel.png"),
+				new Vector3f(1,1,1)
 				);
 		shader = PhongShader.getInstance();
 		camera = new Camera();
@@ -34,7 +35,7 @@ public class Game
 //									2,1,3,
 //									0,1,2,
 //									0,2,3};
-		
+//		
 //		mesh.addVertices(vertices, indices, true);
 		
 		Transform.setProjection(70f, MainComponent.WIDTH, MainComponent.HEIGHT, 0.1f, 1000f);
