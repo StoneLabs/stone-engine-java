@@ -1,7 +1,5 @@
 package StoneEngine3D.Core;
 
-import StoneLabs.sutil.Debug;
-
 public class Game 
 {
 	private Mesh mesh;
@@ -11,14 +9,18 @@ public class Game
 	private Material material;
 
 	private Camera camera;
+
+	PointLight pLight1 = new PointLight(new BaseLight(new Vector3f(1,0,0), 0.8f), new Attenuation(0, 0, 1), new Vector3f(-2,0,5));
+	PointLight pLight2 = new PointLight(new BaseLight(new Vector3f(0,0,1), 0.8f), new Attenuation(0, 0, 1), new Vector3f(2,0,7));
 	
 	public Game()
 	{
-//		mesh = new Mesh();
-		mesh = ResourceLoader.loadMesh("monkey.obj");
+		mesh = new Mesh();
+//		mesh = ResourceLoader.loadMesh("monkey.obj");
 		material = new Material(
-				ResourceLoader.loadTexture("white_pixel.png"),
-				new Vector3f(1,1,1)
+				ResourceLoader.loadTexture("test.png"),
+				new Vector3f(1,1,1),
+				1.0f, 4
 				);
 		shader = PhongShader.getInstance();
 		camera = new Camera();
@@ -35,14 +37,28 @@ public class Game
 //									2,1,3,
 //									0,1,2,
 //									0,2,3};
-//		
-//		mesh.addVertices(vertices, indices, true);
+		
+		float fieldDepth = 10.0f;
+		float fieldWidth = 10.0f;
+		
+		Vertex[] vertices = new Vertex[] { 	new Vertex( new Vector3f(-fieldWidth, 0.0f, -fieldDepth), new Vector2f(0.0f, 0.0f)),
+											new Vertex( new Vector3f(-fieldWidth, 0.0f, fieldDepth * 3), new Vector2f(0.0f, 1.0f)),
+											new Vertex( new Vector3f(fieldWidth * 3, 0.0f, -fieldDepth), new Vector2f(1.0f, 0.0f)),
+											new Vertex( new Vector3f(fieldWidth * 3, 0.0f, fieldDepth * 3), new Vector2f(1.0f, 1.0f))};
+		
+		int indices[] = { 0, 1, 2,
+					      2, 1, 3};
+		
+		mesh.addVertices(vertices, indices, true);
 		
 		Transform.setProjection(70f, MainComponent.WIDTH, MainComponent.HEIGHT, 0.1f, 1000f);
 		Transform.setCamera(camera);
 		
-		PhongShader.setAmbientLight(new Vector3f(0.1f,0.1f,0.1f));
-		PhongShader.setDirectionalLight(new DirectionalLight(new BaseLight(new Vector3f(1,1,1), 0.8f), new Vector3f(1,1,1)));
+		PhongShader.setAmbientLight(new Vector3f(0.2f,0.2f,0.2f));
+		PhongShader.setDirectionalLight(new DirectionalLight(new BaseLight(new Vector3f(1,1,1), 0.1f), new Vector3f(1,1,1)));
+		
+		
+		PhongShader.setPointLights(new PointLight[] {pLight1, pLight2});
 	}
 	
 	public void input()
@@ -75,13 +91,16 @@ public class Game
 	{
 		tmp += Time.getDelta();
 //
-		float sin = (float)Math.sin(tmp);
+//		float sin = (float)Math.sin(tmp);
 //		float posSin = Math.abs(sin);
 		
-		transform.setTranslation(0, 0, 5);
-		transform.setRotation(0,sin*180,0);
+		transform.setTranslation(0, -1, 5);
+//		transform.setRotation(0,sin*180,0);
 //		transform.setScale(posSin,posSin,posSin);
 //		transform.setTranslation(0, 0, 5);
+		
+		pLight1.setPosition(new Vector3f(3,0,8.0f * (float)(Math.sin(tmp) + 0.5f)+10));
+		pLight2.setPosition(new Vector3f(3,0,8.0f * (float)(Math.cos(tmp) + 0.5f)+10));
 	}
 	
 	public void render() 

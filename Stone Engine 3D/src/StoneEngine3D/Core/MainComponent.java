@@ -101,6 +101,7 @@ public class MainComponent
 	
 	public static void main(String[] args)
 	{
+		Debug.Log("Main init...");
 		Window.createWindow(800, 800, TITLE);
 		
 		MainComponent game = new MainComponent();

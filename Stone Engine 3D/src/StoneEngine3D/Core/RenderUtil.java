@@ -1,7 +1,6 @@
 package StoneEngine3D.Core;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL30.*;
 
 public class RenderUtil
 {
@@ -26,11 +25,9 @@ public class RenderUtil
 		glCullFace(GL_BACK);
 		glEnable(GL_CULL_FACE);
 		glEnable(GL_DEPTH_TEST);
-		
-		//TODO Depth clamp
 
 		glEnable(GL_TEXTURE_2D);
-		glEnable(GL_FRAMEBUFFER_SRGB);
+//		glEnable(GL_FRAMEBUFFER_SRGB);
 	}
 	
 	public static void unbindTextures()
