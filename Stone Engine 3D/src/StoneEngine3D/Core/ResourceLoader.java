@@ -110,8 +110,8 @@ public class ResourceLoader
 //			Debug.Log("Loaded " + indexData.length + " indices!");
 //			Debug.Log("Making " + indexData.length/3 + " triangles!");
 			
-			res.addVertices(vertexData, Util.toIntArray(indexData));
-			
+			res.addVertices(vertexData, Util.toIntArray(indexData), true);
+						
 			return res;
 		}
 		catch (Exception e) { e.printStackTrace(); }

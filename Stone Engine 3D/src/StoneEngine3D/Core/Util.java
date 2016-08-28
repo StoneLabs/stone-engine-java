@@ -39,6 +39,10 @@ public class Util
 			
 			buffer.put(vertices[i].getTexCoord().getX());
 			buffer.put(vertices[i].getTexCoord().getY());
+
+			buffer.put(vertices[i].getNormal().getX());
+			buffer.put(vertices[i].getNormal().getY());
+			buffer.put(vertices[i].getNormal().getZ());
 		}
 		
 		buffer.flip();

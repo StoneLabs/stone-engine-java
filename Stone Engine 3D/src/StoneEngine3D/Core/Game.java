@@ -1,5 +1,7 @@
 package StoneEngine3D.Core;
 
+import StoneLabs.sutil.Debug;
+
 public class Game 
 {
 	private Mesh mesh;
@@ -12,7 +14,7 @@ public class Game
 	
 	public Game()
 	{
-		mesh = new Mesh();//ResourceLoader.loadMesh("cube.obj");
+		mesh = ResourceLoader.loadMesh("cube.obj");
 		material = new Material(
 				ResourceLoader.loadTexture("test.png"),
 				new Vector3f(0,1,1)
@@ -21,24 +23,25 @@ public class Game
 		camera = new Camera();
 		transform = new Transform();
 		
-		Vertex[] vertices = new Vertex[] {	
-										new Vertex(	new Vector3f(-1, -1, 0), new Vector2f(0		,0		)),
-										new Vertex(	new Vector3f( 0,  1, 0), new Vector2f(0.5f	,0		)),
-										new Vertex(	new Vector3f( 1, -1, 0), new Vector2f(1.0f	,0		)),
-										new Vertex( new Vector3f( 0, -1, 1), new Vector2f(0		,0.5f	)),
-										};
+//		Vertex[] vertices = new Vertex[] {	
+//										new Vertex(	new Vector3f(-1, -1, 0), new Vector2f(0		,0		)),
+//										new Vertex(	new Vector3f( 0,  1, 0), new Vector2f(0.5f	,0		)),
+//										new Vertex(	new Vector3f( 1, -1, 0), new Vector2f(1.0f	,0		)),
+//										new Vertex( new Vector3f( 0, -1, 1), new Vector2f(0.5f	,1.0f	)),
+//										};
+//		
+//		int[] indices = new int[] {	3,1,0,
+//									2,1,3,
+//									0,1,2,
+//									0,2,3};
 		
-		int[] indices = new int[] {	3,1,0,
-									2,1,3,
-									0,1,2,
-									0,2,3};
-		
-		mesh.addVertices(vertices, indices);
+//		mesh.addVertices(vertices, indices, true);
 		
 		Transform.setProjection(70f, MainComponent.WIDTH, MainComponent.HEIGHT, 0.1f, 1000f);
 		Transform.setCamera(camera);
 		
 		PhongShader.setAmbientLight(new Vector3f(0.1f,0.1f,0.1f));
+		PhongShader.setDirectionalLight(new DirectionalLight(new BaseLight(new Vector3f(1,1,1), 0.8f), new Vector3f(1,1,1)));
 	}
 	
 	public void input()

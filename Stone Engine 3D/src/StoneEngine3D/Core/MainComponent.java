@@ -7,7 +7,7 @@ public class MainComponent
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 800;
 	public static final String TITLE = "Dev build 1 - Stone Engine 3D";
-	public static final double FRAME_CAP = 120.0;
+	public static final double FRAME_CAP = 5000.0;
 	
 	private boolean isRunning;
 	private Game game;
