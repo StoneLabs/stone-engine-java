@@ -2,20 +2,11 @@ package StoneEngine.Core;
 
 public class Time
 {
-	public static final long SECOND = 1000000000;
+	private static final long C_SECONDS = 1000000000;
 	private static double delta;
 	
-	public static long getTime()
+	public static double getTime()
 	{
-		return System.nanoTime();
-	}
-	public static double getDelta()
-	{
-		return delta;
-	}
-	
-	public static void setDelta(double delta)
-	{
-		Time.delta = delta;
+		return (double)System.nanoTime()/(double)C_SECONDS;
 	}
 }

@@ -58,6 +58,21 @@ public class Matrix4f
 
 		return new Matrix4f(m);
 	}
+	public static Matrix4f orthographic(float left, float right, float bottom, float top, float zNear, float zFar)
+	{
+		float width = right - left;
+		float height = top - bottom;
+		
+		float depth = zFar - zNear;
+		
+		float[][] m = new float[][] {
+				{2 / width,0,0,-(right + left)/width},
+				{0, 2 / height,0,-(top + bottom)/height},
+				{0,0, -2 / depth,-(zFar + zNear)/depth},
+				{0,0,0,1}};
+
+		return new Matrix4f(m);
+	}
 	public static Matrix4f rotation(Vector3f forward, Vector3f up)
 	{
 		Vector3f f = forward.normalize();

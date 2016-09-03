@@ -33,6 +33,17 @@ public class Vector2f
 		
 		return new Vector2f(x * cos - y * sin, x * sin + y * cos);
 	}
+
+	public float cross(Vector2f r)
+	{
+		return x * r.y - y * r.x;
+	}
+	
+	public Vector2f lerp(Vector2f dest, float lerpFactor)
+	{
+		return dest.sub(this).mul(lerpFactor).add(this);
+	}
+	
 	public Vector2f add(Vector2f r)
 	{
 		return new Vector2f(x+r.x, y+r.y);
@@ -86,5 +97,11 @@ public class Vector2f
 
 	public void setY(float y) {
 		this.y = y;
+	}
+	
+	public boolean equals(Vector2f other)
+	{
+		return  x == other.x &&
+				y == other.y ;
 	}
 }

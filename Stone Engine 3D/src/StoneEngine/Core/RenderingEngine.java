@@ -46,9 +46,9 @@ public class RenderingEngine
 	}
 	
 	//Temp. hack
-	public void input()
+	public void input(float delta)
 	{
-		mainCamera.input();
+		mainCamera.input(delta);
 	}
 	
 	public void render(GameObject object)

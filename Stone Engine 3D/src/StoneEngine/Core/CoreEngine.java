@@ -49,18 +49,18 @@ public class CoreEngine
 		
 		game.init();
 		
-		long lastTime = Time.getTime();
+		double lastTime = Time.getTime();
 		double unprocessedTime = 0;
 		
 		while(isRunning)
 		{
 			boolean render = false;
 			
-			long startTime = Time.getTime();
-			long passedTime = startTime - lastTime;
+			double startTime = Time.getTime();
+			double passedTime = startTime - lastTime;
 			lastTime = startTime;
 			
-			unprocessedTime += passedTime / (double)Time.SECOND;
+			unprocessedTime += passedTime;
 			frameCounter += passedTime;
 			
 			while (unprocessedTime > frameTime)
@@ -72,15 +72,15 @@ public class CoreEngine
 				if(Window.isCloseRequested())
 					Stop();
 				
-				Time.setDelta(frameTime);
+//				Time.setDelta(frameTime);
 				
-				game.input();
-				renderingEngine.input(); //tmp hack
+				game.input(frameTime);
+				renderingEngine.input(frameTime); //tmp hack
 				Input.update();
 				
-				game.update();
+				game.update(frameTime);
 				
-				if (frameCounter >= Time.SECOND)
+				if (frameCounter >= 1.0)//seconds
 				{
 					Debug.Log("FPS " + frames);
 					frames = 0;

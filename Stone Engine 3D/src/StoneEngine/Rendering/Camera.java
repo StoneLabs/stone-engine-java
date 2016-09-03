@@ -30,12 +30,12 @@ public class Camera
 	}
 	
 	private boolean mouseLocked = false;
-	public void input()
+	public void input(float delta)
 	{
 		Vector2f centerPosition = new Vector2f(Window.getWidth()/2, Window.getHeight()/2);
 		
-		float moveAmnt = (float)(10 * Time.getDelta());
-		float rotAmnt = (float)(100 * Time.getDelta());
+		float moveAmnt = (float)(10 * delta);
+		float rotAmnt = (float)(100 * delta);
 		float sensitivity = 0.2f;
 		
 		if (Input.getKey(Input.Keys.KEY_W))
