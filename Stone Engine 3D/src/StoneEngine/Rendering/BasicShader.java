@@ -1,7 +1,7 @@
 package StoneEngine.Rendering;
 
-import StoneEngine.Core.Matrix4f;
 import StoneEngine.Core.ResourceLoader;
+import StoneEngine.Math.Matrix4f;
 
 public class BasicShader extends Shader
 {
@@ -26,10 +26,7 @@ public class BasicShader extends Shader
 	
 	public void updateUniforms(Matrix4f worldMatrix, Matrix4f projectedMatrix, Material material)
 	{
-		if (material.getTexture() != null)
-			material.getTexture().bind();
-		else
-			RenderUtil.unbindTextures();
+		material.getTexture().bind();
 		
 		setUniform("transform", projectedMatrix);
 		setUniform("color", material.getColor());

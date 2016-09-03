@@ -7,8 +7,8 @@ import StoneEngine.Core.GameObject;
 import StoneEngine.Core.ResourceLoader;
 import StoneEngine.Core.Time;
 import StoneEngine.Core.Transform;
-import StoneEngine.Core.Vector2f;
-import StoneEngine.Core.Vector3f;
+import StoneEngine.Math.Vector2f;
+import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.Attenuation;
 import StoneEngine.Rendering.BaseLight;
 import StoneEngine.Rendering.Camera;
@@ -26,12 +26,9 @@ import StoneLabs.sutil.Debug;
 public class TestGame extends Game
 {
 	private Camera camera;
-	
-	private GameObject root;
 
 	public void init()
 	{
-		root = new GameObject();
 		camera = new Camera();
 		
 		
@@ -56,84 +53,30 @@ public class TestGame extends Game
 		
 		MeshRenderer meshRenderer = new MeshRenderer(mesh, material);
 		
-		root.addComponent(meshRenderer);
-		root.getTransform().setTranslation(0, -1, 5);
+		GameObject planeObject = new GameObject();
+		planeObject.addComponent(meshRenderer);
+		planeObject.getTransform().setTranslation(0, -2, 5);
+		
+		getRootObject().addChild(planeObject);
 		
 		Transform.setProjection(70f, Window.getWidth(), Window.getHeight(), 0.1f, 1000f);
 		Transform.setCamera(camera);
 		
 	}
 	
-	boolean mouseLocked = false;
-	public void input()
-	{
-		root.input();
-		
-		Vector2f centerPosition = new Vector2f(Window.getWidth()/2, Window.getHeight()/2);
-		
-		float moveAmnt = (float)(10 * Time.getDelta());
-		float rotAmnt = (float)(100 * Time.getDelta());
-		float sensitivity = 0.2f;
-		
-		if (Input.getKey(Input.Keys.KEY_W))
-			camera.move(camera.getForward(), moveAmnt);
-		if (Input.getKey(Input.Keys.KEY_S))
-			camera.move(camera.getForward(), -moveAmnt);
-		if (Input.getKey(Input.Keys.KEY_A))
-			camera.move(camera.getLeft(), moveAmnt);
-		if (Input.getKey(Input.Keys.KEY_D))
-			camera.move(camera.getRight(), moveAmnt);
-		
-		if (Input.getKey(Input.Keys.KEY_UP))
-			camera.rotateX(-rotAmnt);
-		if (Input.getKey(Input.Keys.KEY_DOWN))
-			camera.rotateX(rotAmnt);
-		if (Input.getKey(Input.Keys.KEY_LEFT))
-			camera.rotateY(-rotAmnt);
-		if (Input.getKey(Input.Keys.KEY_RIGHT))
-			camera.rotateY(rotAmnt);
-		
-
-		if(Input.getKey(Input.Keys.KEY_ESCAPE))
-		{
-			Input.setCursor(true);
-			mouseLocked = false;
-		}
-//		Debug.Log("MB 0: " + Input.getMouse(0));
-//		Debug.Log("MB 1: " + Input.getMouse(1));
-//		Debug.Log("MB 2: " + Input.getMouse(2));
-//		Debug.Log("MB 3: " + Input.getMouse(3));
-//		Debug.Log("MB 4: " + Input.getMouse(4));
-		if(Input.getMouseDown(0))
-		{
-			Input.setMousePosition(centerPosition);
-			Input.setCursor(false);
-			mouseLocked = true;
-		}
-		if(mouseLocked)
-		{
-			Vector2f deltaPos = Input.getMousePosition().sub(centerPosition);
-			
-			boolean rotY = deltaPos.getX() != 0;
-			boolean rotX = deltaPos.getY() != 0;
-			
-			if(rotY)
-				camera.rotateY(deltaPos.getX() * sensitivity);
-			if(rotX)
-				camera.rotateX(-deltaPos.getY() * sensitivity);
-				
-			if(rotY || rotX)
-				Input.setMousePosition(new Vector2f(Window.getWidth()/2, Window.getHeight()/2));
-		}
-	}
-
-	public void update()
-	{
-		root.update();
-	}
-	
-	public void render() 
-	{
-		root.render();
-	}
+//	public void input()
+//	{
+//		root.input();
+//		camera.input();
+//	}
+//
+//	public void update()
+//	{
+//		root.update();
+//	}
+//	
+//	public void render() 
+//	{
+//		root.render();
+//	}
 }

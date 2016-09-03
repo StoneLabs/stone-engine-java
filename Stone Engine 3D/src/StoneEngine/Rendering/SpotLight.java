@@ -1,6 +1,6 @@
 package StoneEngine.Rendering;
 
-import StoneEngine.Core.Vector3f;
+import StoneEngine.Math.Vector3f;
 
 public class SpotLight
 {

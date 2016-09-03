@@ -1,9 +1,9 @@
 package StoneEngine.Rendering;
 
-import StoneEngine.Core.Matrix4f;
 import StoneEngine.Core.ResourceLoader;
 import StoneEngine.Core.Transform;
-import StoneEngine.Core.Vector3f;
+import StoneEngine.Math.Matrix4f;
+import StoneEngine.Math.Vector3f;
 import StoneLabs.sutil.Debug;
 
 public class PhongShader extends Shader
@@ -71,10 +71,7 @@ public class PhongShader extends Shader
 	
 	public void updateUniforms(Matrix4f worldMatrix, Matrix4f projectedMatrix, Material material)
 	{
-		if (material.getTexture() != null)
-			material.getTexture().bind();
-		else
-			RenderUtil.unbindTextures();
+		material.getTexture().bind();
 		
 		setUniform("transform", worldMatrix);
 		setUniform("transformProjected", projectedMatrix);

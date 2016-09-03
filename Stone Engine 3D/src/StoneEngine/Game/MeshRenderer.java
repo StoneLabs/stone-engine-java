@@ -19,10 +19,8 @@ public class MeshRenderer extends GameComponent
 	}
 	
 	@Override
-	public void render(Transform transform)
+	public void render(Transform transform, Shader shader)
 	{
-		Shader shader = BasicShader.getInstance();
-		
 		shader.bind();
 		shader.updateUniforms(transform.getTanformation(), transform.getProjectedTransformation(), material);
 		mesh.draw();

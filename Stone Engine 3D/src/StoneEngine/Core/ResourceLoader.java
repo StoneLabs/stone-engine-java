@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.opengl.TextureLoader;
 
+import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.Mesh;
 import StoneEngine.Rendering.Texture;
 import StoneEngine.Rendering.Vertex;

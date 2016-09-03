@@ -3,6 +3,8 @@ package StoneEngine.Core;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import StoneEngine.Math.Vector2f;
+
 public class Input 
 {	
 	public static final int NUM_KEYCODES = 256;

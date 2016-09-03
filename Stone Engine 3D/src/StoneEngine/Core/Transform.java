@@ -1,5 +1,7 @@
 package StoneEngine.Core;
 
+import StoneEngine.Math.Matrix4f;
+import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.Camera;
 
 public class Transform 

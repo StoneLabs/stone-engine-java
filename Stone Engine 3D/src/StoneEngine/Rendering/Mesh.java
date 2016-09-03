@@ -5,7 +5,7 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
 import StoneEngine.Core.Util;
-import StoneEngine.Core.Vector3f;
+import StoneEngine.Math.Vector3f;
 
 public class Mesh
 {

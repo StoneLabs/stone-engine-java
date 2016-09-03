@@ -1,6 +1,5 @@
 package StoneEngine.Core;
 
-import StoneEngine.Rendering.RenderUtil;
 import StoneEngine.Rendering.Window;
 import StoneLabs.sutil.Debug;
 
@@ -8,6 +7,7 @@ public class CoreEngine
 {	
 	private boolean isRunning;
 	private Game game;
+	private RenderingEngine renderingEngine;
 	private int width, height;
 	private float frameTime;
 	
@@ -22,14 +22,13 @@ public class CoreEngine
 	
 	private void initRenderSystem()
 	{
-		Debug.Log("OpenGL " + RenderUtil.getOpenGLVersion());
-		RenderUtil.initGraphics();
+		Debug.Log("OpenGL " + RenderingEngine.getOpenGLVersion());
 	}
 	
 	public void createWindow(String title)
 	{
 		Window.createWindow(width, height, title);
-		initRenderSystem();		
+		this.renderingEngine = new RenderingEngine();
 	}
 	
 	public void Start()
@@ -95,18 +94,14 @@ public class CoreEngine
 			
 			if (render)
 			{
-				render();
+				renderingEngine.render(game.getRootObject());
+				Window.render();
 				frames++;
 			}
 		}
 		cleanUp();
 	}
-	private void render()
-	{
-		RenderUtil.clearScreen();
-		game.render();
-		Window.render();
-	}
+	
 	private void cleanUp()
 	{
 		Window.dispose();

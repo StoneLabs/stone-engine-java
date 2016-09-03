@@ -2,6 +2,8 @@ package StoneEngine.Core;
 
 import java.util.ArrayList;
 
+import StoneEngine.Rendering.Shader;
+
 public class GameObject
 {
 	private ArrayList<GameObject> children;
@@ -41,13 +43,13 @@ public class GameObject
 		for (GameObject child : children)
 			child.update();
 	}
-	public void render()
+	public void render(Shader shader)
 	{
 		for (GameComponent component : components)
-			component.render(transform);
+			component.render(transform, shader);
 		
 		for (GameObject child : children)
-			child.render();
+			child.render(shader);
 	}
 
 	public Transform getTransform() 

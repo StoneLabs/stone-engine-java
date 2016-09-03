@@ -5,9 +5,9 @@ import static org.lwjgl.opengl.GL32.*;
 
 import java.util.HashMap;
 
-import StoneEngine.Core.Matrix4f;
 import StoneEngine.Core.Util;
-import StoneEngine.Core.Vector3f;
+import StoneEngine.Math.Matrix4f;
+import StoneEngine.Math.Vector3f;
 import StoneLabs.sutil.Debug;
 
 public class Shader
