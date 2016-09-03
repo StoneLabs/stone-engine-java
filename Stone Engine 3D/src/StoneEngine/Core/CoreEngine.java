@@ -19,12 +19,7 @@ public class CoreEngine
 		this.height = height;
 		this.frameTime = 1.0f/framerate;
 	}
-	
-	private void initRenderSystem()
-	{
-		Debug.Log("OpenGL " + RenderingEngine.getOpenGLVersion());
-	}
-	
+		
 	public void createWindow(String title)
 	{
 		Window.createWindow(width, height, title);
@@ -80,6 +75,7 @@ public class CoreEngine
 				Time.setDelta(frameTime);
 				
 				game.input();
+				renderingEngine.input(); //tmp hack
 				Input.update();
 				
 				game.update();

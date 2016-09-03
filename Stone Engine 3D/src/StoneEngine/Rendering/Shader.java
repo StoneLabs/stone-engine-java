@@ -5,6 +5,8 @@ import static org.lwjgl.opengl.GL32.*;
 
 import java.util.HashMap;
 
+import StoneEngine.Core.RenderingEngine;
+import StoneEngine.Core.Transform;
 import StoneEngine.Core.Util;
 import StoneEngine.Math.Matrix4f;
 import StoneEngine.Math.Vector3f;
@@ -12,6 +14,7 @@ import StoneLabs.sutil.Debug;
 
 public class Shader
 {
+	private RenderingEngine renderingEngine;
 	private int program;
 	
 	private HashMap<String, Integer> uniforms;
@@ -29,8 +32,8 @@ public class Shader
 	{
 		glUseProgram(program);
 	}
-	
-	public void updateUniforms(Matrix4f worldMatrix, Matrix4f projectedMatrix, Material material)
+		
+	public void updateUniforms(Transform transform, Material material)
 	{
 		
 	}
@@ -101,4 +104,13 @@ public class Shader
 	{
 		glUniformMatrix4(uniforms.get(uniformName), true, Util.createFlippedBuffer(value));
 	}
+	public RenderingEngine getRenderingEngine() 
+	{
+		return renderingEngine;
+	}
+	public void setRenderingEngine(RenderingEngine renderingEngine) 
+	{
+		this.renderingEngine = renderingEngine;
+	}
+	
 }

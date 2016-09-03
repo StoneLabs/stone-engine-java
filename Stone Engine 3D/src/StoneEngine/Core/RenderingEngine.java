@@ -19,11 +19,19 @@ import static org.lwjgl.opengl.GL11.glGetString;
 
 import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.BasicShader;
+import StoneEngine.Rendering.Camera;
+import StoneEngine.Rendering.Shader;
+import StoneEngine.Rendering.Window;
+import StoneLabs.sutil.Debug;
 
 public class RenderingEngine
 {
+	private Camera mainCamera;
+	
 	public RenderingEngine()
 	{
+		Debug.Log("OpenGL " + RenderingEngine.getOpenGLVersion());
+		
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		
 		glFrontFace(GL_CW);
@@ -33,12 +41,24 @@ public class RenderingEngine
 
 		glEnable(GL_TEXTURE_2D);
 //		glEnable(GL_FRAMEBUFFER_SRGB);
+		
+		mainCamera = new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth()/(float)Window.getHeight(), 0.01f, 1000.0f);
+	}
+	
+	//Temp. hack
+	public void input()
+	{
+		mainCamera.input();
 	}
 	
 	public void render(GameObject object)
 	{
 		clearScreen();
-		object.render(BasicShader.getInstance());
+		
+		Shader shader = BasicShader.getInstance();
+		shader.setRenderingEngine(this);
+		
+		object.render(shader);
 	}	
 	
 	private static void clearScreen()
@@ -68,4 +88,16 @@ public class RenderingEngine
 	{
 		return glGetString(GL_VERSION);
 	}
+
+	public Camera getMainCamera()
+	{
+		return mainCamera;
+	}
+
+	public void setMainCamera(Camera mainCamera)
+	{
+		this.mainCamera = mainCamera;
+	}
+	
+	
 }

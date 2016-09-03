@@ -2,6 +2,7 @@ package StoneEngine.Rendering;
 
 import StoneEngine.Core.Input;
 import StoneEngine.Core.Time;
+import StoneEngine.Math.Matrix4f;
 import StoneEngine.Math.Vector2f;
 import StoneEngine.Math.Vector3f;
 
@@ -10,18 +11,24 @@ public class Camera
 	private Vector3f pos;
 	private Vector3f forward;
 	private Vector3f up;
+	private Matrix4f projection;
 		
-	public Camera()
+	public Camera(float fov, float aspect, float zNear, float zFar)
 	{
-		this(Vector3f.NULL(), new Vector3f(0,0,1), Vector3f.YAXIS());
-	}
-	public Camera(Vector3f pos, Vector3f forward, Vector3f up)
-	{
-		this.pos = pos;
-		this.forward = forward;
-		this.up = up;
+		this.pos = new Vector3f(0,0,0);
+		this.forward = new Vector3f(0,0,1);
+		this.up = new Vector3f(0,1,0);
+		this.projection = Matrix4f.perspective(fov, aspect, zNear, zFar);
 	}
 
+	public Matrix4f getViewProjection()
+	{
+		Matrix4f cameraRotation = Matrix4f.rotation(forward, up);
+		Matrix4f cameraTranslation = Matrix4f.translation(-pos.getX(), -pos.getY(), -pos.getZ());
+		
+		return projection.mul(cameraRotation.mul(cameraTranslation));
+	}
+	
 	private boolean mouseLocked = false;
 	public void input()
 	{

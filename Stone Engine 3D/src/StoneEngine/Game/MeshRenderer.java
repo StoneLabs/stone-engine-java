@@ -22,7 +22,7 @@ public class MeshRenderer extends GameComponent
 	public void render(Transform transform, Shader shader)
 	{
 		shader.bind();
-		shader.updateUniforms(transform.getTanformation(), transform.getProjectedTransformation(), material);
+		shader.updateUniforms(transform, material);
 		mesh.draw();
 	}
 }

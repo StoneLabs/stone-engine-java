@@ -1,6 +1,7 @@
 package StoneEngine.Rendering;
 
 import StoneEngine.Core.ResourceLoader;
+import StoneEngine.Core.Transform;
 import StoneEngine.Math.Matrix4f;
 
 public class BasicShader extends Shader
@@ -24,8 +25,11 @@ public class BasicShader extends Shader
 		addUniform("color");
 	}
 	
-	public void updateUniforms(Matrix4f worldMatrix, Matrix4f projectedMatrix, Material material)
+	public void updateUniforms(Transform transform, Material material)
 	{
+		Matrix4f worldMatrix = transform.getTanformation();
+		Matrix4f projectedMatrix = getRenderingEngine().getMainCamera().getViewProjection().mul(worldMatrix);
+		
 		material.getTexture().bind();
 		
 		setUniform("transform", projectedMatrix);

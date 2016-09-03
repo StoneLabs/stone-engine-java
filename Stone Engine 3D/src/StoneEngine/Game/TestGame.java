@@ -29,7 +29,7 @@ public class TestGame extends Game
 
 	public void init()
 	{
-		camera = new Camera();
+//		camera = new Camera();
 		
 		
 		float fieldDepth = 10.0f;
@@ -59,8 +59,8 @@ public class TestGame extends Game
 		
 		getRootObject().addChild(planeObject);
 		
-		Transform.setProjection(70f, Window.getWidth(), Window.getHeight(), 0.1f, 1000f);
-		Transform.setCamera(camera);
+//		Transform.setProjection(70f, Window.getWidth(), Window.getHeight(), 0.1f, 1000f);
+//		Transform.setCamera(camera);
 		
 	}
 	
