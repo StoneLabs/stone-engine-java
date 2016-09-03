@@ -19,6 +19,16 @@ public class Mesh
 		ibo = glGenBuffers();
 		size = 0;
 	}
+	public Mesh(Vertex[] vertices, int[] indices)
+	{
+		this(vertices, indices, true);
+	}
+	public Mesh(Vertex[] vertices, int[] indices, boolean calcNormals)
+	{
+		this();
+		
+		addVertices(vertices, indices, calcNormals);
+	}
 
 	public void addVertices(Vertex[] vertices, int[] indices)
 	{

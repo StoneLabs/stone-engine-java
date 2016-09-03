@@ -2,7 +2,6 @@ package StoneEngine.Core;
 
 import StoneEngine.Rendering.RenderUtil;
 import StoneEngine.Rendering.Window;
-import StoneEngine.Game.Game;
 import StoneLabs.sutil.Debug;
 
 public class CoreEngine 
