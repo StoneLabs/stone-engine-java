@@ -1,5 +1,9 @@
-package StoneEngine3D.Core;
+package StoneEngine.Rendering;
 
+import StoneEngine.Core.Matrix4f;
+import StoneEngine.Core.ResourceLoader;
+import StoneEngine.Core.Transform;
+import StoneEngine.Core.Vector3f;
 import StoneLabs.sutil.Debug;
 
 public class PhongShader extends Shader

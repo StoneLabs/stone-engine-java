@@ -1,4 +1,4 @@
-package StoneEngine3D.Core;
+package StoneEngine.Core;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,6 +8,9 @@ import java.util.ArrayList;
 
 import org.newdawn.slick.opengl.TextureLoader;
 
+import StoneEngine.Rendering.Mesh;
+import StoneEngine.Rendering.Texture;
+import StoneEngine.Rendering.Vertex;
 import StoneLabs.sutil.Debug;
 
 public class ResourceLoader

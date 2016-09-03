@@ -1,4 +1,6 @@
-package StoneEngine3D.Core;
+package StoneEngine.Core;
+
+import StoneEngine.Rendering.Camera;
 
 public class Transform 
 {

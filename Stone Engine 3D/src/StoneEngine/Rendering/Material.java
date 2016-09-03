@@ -1,4 +1,6 @@
-package StoneEngine3D.Core;
+package StoneEngine.Rendering;
+
+import StoneEngine.Core.Vector3f;
 
 public class Material
 {

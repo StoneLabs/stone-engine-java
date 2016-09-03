@@ -1,6 +1,27 @@
-package StoneEngine3D.Core;
+package StoneEngine.Game;
 
-public class Game 
+import StoneEngine.Core.Input;
+import StoneEngine.Core.CoreEngine;
+import StoneEngine.Core.ResourceLoader;
+import StoneEngine.Core.Time;
+import StoneEngine.Core.Transform;
+import StoneEngine.Core.Vector2f;
+import StoneEngine.Core.Vector3f;
+import StoneEngine.Rendering.Attenuation;
+import StoneEngine.Rendering.BaseLight;
+import StoneEngine.Rendering.Camera;
+import StoneEngine.Rendering.DirectionalLight;
+import StoneEngine.Rendering.Material;
+import StoneEngine.Rendering.Mesh;
+import StoneEngine.Rendering.PhongShader;
+import StoneEngine.Rendering.PointLight;
+import StoneEngine.Rendering.Shader;
+import StoneEngine.Rendering.SpotLight;
+import StoneEngine.Rendering.Vertex;
+import StoneEngine.Rendering.Window;
+import StoneLabs.sutil.Debug;
+
+public class TestGame implements Game
 {
 	private Mesh mesh;
 	private Shader shader;
@@ -14,10 +35,10 @@ public class Game
 	PointLight pLight2 = new PointLight(new BaseLight(new Vector3f(0,0,1), 0.8f), new Attenuation(0, 0, 1), new Vector3f(2,2,7),10);
 	
 	SpotLight sLight1 = new SpotLight(
-			new PointLight(new BaseLight(new Vector3f(0,1,1), 0.8f), new Attenuation(0, 0, 0.1f), new Vector3f(-2,0,5),30),
+			new PointLight(new BaseLight(new Vector3f(0,1,1), 0.8f), new Attenuation(0, 0, 0.01f), new Vector3f(-2,0,5),500),
 			new Vector3f(1,1,1), 0.7f);
 	
-	public Game()
+	public void init()
 	{
 		mesh = new Mesh();
 //		mesh = ResourceLoader.loadMesh("monkey.obj");
@@ -55,7 +76,7 @@ public class Game
 		
 		mesh.addVertices(vertices, indices, true);
 		
-		Transform.setProjection(70f, MainComponent.WIDTH, MainComponent.HEIGHT, 0.1f, 1000f);
+		Transform.setProjection(70f, Window.getWidth(), Window.getHeight(), 0.1f, 1000f);
 		Transform.setCamera(camera);
 		
 		PhongShader.setAmbientLight(new Vector3f(0.0f,0.0f,0.0f));
@@ -66,10 +87,14 @@ public class Game
 		PhongShader.setSpotLights(new SpotLight[] {sLight1});
 	}
 	
+	boolean mouseLocked = false;
 	public void input()
 	{
+		Vector2f centerPosition = new Vector2f(Window.getWidth()/2, Window.getHeight()/2);
+		
 		float moveAmnt = (float)(10 * Time.getDelta());
 		float rotAmnt = (float)(100 * Time.getDelta());
+		float sensitivity = 0.2f;
 		
 		if (Input.getKey(Input.Keys.KEY_W))
 			camera.move(camera.getForward(), moveAmnt);
@@ -88,6 +113,39 @@ public class Game
 			camera.rotateY(-rotAmnt);
 		if (Input.getKey(Input.Keys.KEY_RIGHT))
 			camera.rotateY(rotAmnt);
+		
+
+		if(Input.getKey(Input.Keys.KEY_ESCAPE))
+		{
+			Input.setCursor(true);
+			mouseLocked = false;
+		}
+//		Debug.Log("MB 0: " + Input.getMouse(0));
+//		Debug.Log("MB 1: " + Input.getMouse(1));
+//		Debug.Log("MB 2: " + Input.getMouse(2));
+//		Debug.Log("MB 3: " + Input.getMouse(3));
+//		Debug.Log("MB 4: " + Input.getMouse(4));
+		if(Input.getMouseDown(0))
+		{
+			Input.setMousePosition(centerPosition);
+			Input.setCursor(false);
+			mouseLocked = true;
+		}
+		if(mouseLocked)
+		{
+			Vector2f deltaPos = Input.getMousePosition().sub(centerPosition);
+			
+			boolean rotY = deltaPos.getX() != 0;
+			boolean rotX = deltaPos.getY() != 0;
+			
+			if(rotY)
+				camera.rotateY(deltaPos.getX() * sensitivity);
+			if(rotX)
+				camera.rotateX(-deltaPos.getY() * sensitivity);
+				
+			if(rotY || rotX)
+				Input.setMousePosition(new Vector2f(Window.getWidth()/2, Window.getHeight()/2));
+		}
 		
 		sLight1.getPointLight().setPosition(camera.getPos());
 		sLight1.setDirection(camera.getForward());

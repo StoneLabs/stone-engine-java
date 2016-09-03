@@ -1,8 +1,11 @@
-package StoneEngine3D.Core;
+package StoneEngine.Rendering;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
+
+import StoneEngine.Core.Util;
+import StoneEngine.Core.Vector3f;
 
 public class Mesh
 {

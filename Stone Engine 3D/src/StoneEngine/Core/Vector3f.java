@@ -1,4 +1,4 @@
-package StoneEngine3D.Core;
+package StoneEngine.Core;
 
 public class Vector3f 
 {

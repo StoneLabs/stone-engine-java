@@ -1,4 +1,7 @@
-package StoneEngine3D.Core;
+package StoneEngine.Rendering;
+
+import StoneEngine.Core.Matrix4f;
+import StoneEngine.Core.ResourceLoader;
 
 public class BasicShader extends Shader
 {

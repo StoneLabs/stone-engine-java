@@ -1,4 +1,4 @@
-package StoneEngine3D.Core;
+package StoneEngine.Core;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -186,7 +186,7 @@ public class Input
 	{
 		return new Vector2f(Mouse.getX(), Mouse.getY());
 	}
-	
+
 	public static void setMousePosition(Vector2f pos)
 	{
 		Mouse.setCursorPosition((int)pos.getX(), (int)pos.getY());

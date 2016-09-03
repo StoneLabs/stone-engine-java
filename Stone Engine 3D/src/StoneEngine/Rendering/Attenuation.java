@@ -1,4 +1,4 @@
-package StoneEngine3D.Core;
+package StoneEngine.Rendering;
 
 public class Attenuation 
 {

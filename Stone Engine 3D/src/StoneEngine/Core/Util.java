@@ -1,4 +1,4 @@
-package StoneEngine3D.Core;
+package StoneEngine.Core;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.lwjgl.BufferUtils;
+
+import StoneEngine.Rendering.Vertex;
 
 public class Util
 {

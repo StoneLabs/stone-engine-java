@@ -1,4 +1,4 @@
-package StoneEngine3D.Core;
+package StoneEngine.Rendering;
 
 import static org.lwjgl.opengl.GL11.*;
 

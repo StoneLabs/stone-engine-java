@@ -1,23 +1,36 @@
-package StoneEngine3D.Core;
+package StoneEngine.Core;
 
+import StoneEngine.Rendering.RenderUtil;
+import StoneEngine.Rendering.Window;
+import StoneEngine.Game.Game;
 import StoneLabs.sutil.Debug;
 
-public class MainComponent 
-{
-	public static final int WIDTH = 800;
-	public static final int HEIGHT = 800;
-	public static final String TITLE = "Dev build 1 - Stone Engine 3D";
-	public static final double FRAME_CAP = 5000.0;
-	
+public class CoreEngine 
+{	
 	private boolean isRunning;
 	private Game game;
+	private int width, height;
+	private float frameTime;
 	
-	public MainComponent()
+	public CoreEngine(int width, int height, float framerate, Game game)
+	{
+		isRunning = false;
+		this.game = game;
+		this.width = width;
+		this.height = height;
+		this.frameTime = 1.0f/framerate;
+	}
+	
+	private void initRenderSystem()
 	{
 		Debug.Log("OpenGL " + RenderUtil.getOpenGLVersion());
 		RenderUtil.initGraphics();
-		isRunning = false;
-		game = new Game();
+	}
+	
+	public void createWindow(String title)
+	{
+		Window.createWindow(width, height, title);
+		initRenderSystem();		
 	}
 	
 	public void Start()
@@ -41,7 +54,7 @@ public class MainComponent
 		int frames = 0;
 		long frameCounter = 0;
 		
-		final double frameTime = 1.0 / FRAME_CAP;
+		game.init();
 		
 		long lastTime = Time.getTime();
 		double unprocessedTime = 0;
@@ -68,8 +81,9 @@ public class MainComponent
 				
 				Time.setDelta(frameTime);
 				
-				Input.update();
 				game.input();
+				Input.update();
+				
 				game.update();
 				
 				if (frameCounter >= Time.SECOND)
@@ -97,14 +111,5 @@ public class MainComponent
 	private void cleanUp()
 	{
 		Window.dispose();
-	}
-	
-	public static void main(String[] args)
-	{
-		Debug.Log("Main init...");
-		Window.createWindow(800, 800, TITLE);
-		
-		MainComponent game = new MainComponent();
-		game.Start();
 	}
 }
