@@ -2,6 +2,7 @@ package StoneEngine.Core;
 
 import java.util.ArrayList;
 
+import StoneEngine.Components.GameComponent;
 import StoneEngine.Rendering.Shader;
 
 public class GameObject
@@ -50,6 +51,16 @@ public class GameObject
 		
 		for (GameObject child : children)
 			child.render(shader);
+	}
+
+	//Temporary solution!
+	public void addToRenderingEngine(RenderingEngine renderingEngine)
+	{
+		for (GameComponent component : components)
+			component.addToRenderingEngine(renderingEngine);
+		
+		for (GameObject child : children)
+			child.addToRenderingEngine(renderingEngine);
 	}
 
 	public Transform getTransform() 

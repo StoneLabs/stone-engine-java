@@ -1,5 +1,8 @@
 package StoneEngine.Rendering;
 
+import StoneEngine.Components.DirectionalLight;
+import StoneEngine.Components.PointLight;
+import StoneEngine.Components.SpotLight;
 import StoneEngine.Core.ResourceLoader;
 import StoneEngine.Core.Transform;
 import StoneEngine.Math.Matrix4f;

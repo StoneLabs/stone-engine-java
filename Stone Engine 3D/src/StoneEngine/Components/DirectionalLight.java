@@ -1,8 +1,10 @@
-package StoneEngine.Rendering;
+package StoneEngine.Components;
 
+import StoneEngine.Core.RenderingEngine;
 import StoneEngine.Math.Vector3f;
+import StoneEngine.Rendering.BaseLight;
 
-public class DirectionalLight
+public class DirectionalLight extends GameComponent
 {
 	private BaseLight base;
 	private Vector3f direction;
@@ -11,6 +13,13 @@ public class DirectionalLight
 	{
 		this.base = base;
 		this.direction = direction.normalize();
+	}
+
+	//Temporary solution!
+	@Override
+	public void addToRenderingEngine(RenderingEngine renderingEngine)
+	{
+		renderingEngine.addDirectionalLight(this);
 	}
 
 	public BaseLight getBase() {

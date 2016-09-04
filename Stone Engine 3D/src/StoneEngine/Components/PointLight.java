@@ -1,8 +1,11 @@
-package StoneEngine.Rendering;
+package StoneEngine.Components;
 
+import StoneEngine.Core.RenderingEngine;
 import StoneEngine.Math.Vector3f;
+import StoneEngine.Rendering.Attenuation;
+import StoneEngine.Rendering.BaseLight;
 
-public class PointLight 
+public class PointLight extends GameComponent
 {
 	private BaseLight baseLight;
 	private Attenuation atten;
@@ -15,6 +18,13 @@ public class PointLight
 		this.atten = atten;
 		this.position = position;
 		this.range = range;
+	}
+	
+	//Temporary solution!
+	@Override
+	public void addToRenderingEngine(RenderingEngine renderingEngine)
+	{
+		renderingEngine.addPointLight(this);
 	}
 	
 	public BaseLight getBaseLight() {

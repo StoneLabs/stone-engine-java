@@ -1,6 +1,5 @@
-package StoneEngine.Game;
+package StoneEngine.Components;
 
-import StoneEngine.Core.GameComponent;
 import StoneEngine.Core.Transform;
 import StoneEngine.Rendering.BasicShader;
 import StoneEngine.Rendering.Material;

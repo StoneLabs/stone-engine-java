@@ -1,8 +1,9 @@
-package StoneEngine.Rendering;
+package StoneEngine.Components;
 
+import StoneEngine.Core.RenderingEngine;
 import StoneEngine.Math.Vector3f;
 
-public class SpotLight
+public class SpotLight extends GameComponent
 {
 	private PointLight pointLight;
 	private Vector3f direction;
@@ -13,6 +14,13 @@ public class SpotLight
 		this.pointLight = pointLight;
 		this.direction = direction.normalize();
 		this.cutoff = cutoff;
+	}
+	
+	//Temporary solution!
+	@Override
+	public void addToRenderingEngine(RenderingEngine renderingEngine)
+	{
+		renderingEngine.addSpotLight(this);
 	}
 	
 	public PointLight getPointLight() {

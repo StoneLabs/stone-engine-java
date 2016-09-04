@@ -1,5 +1,7 @@
-package StoneEngine.Core;
+package StoneEngine.Components;
 
+import StoneEngine.Core.RenderingEngine;
+import StoneEngine.Core.Transform;
 import StoneEngine.Rendering.Shader;
 
 public abstract class GameComponent
@@ -15,6 +17,12 @@ public abstract class GameComponent
 	}
 	
 	public void render(Transform transform, Shader shader)
+	{
+		
+	}
+	
+	//Temporary solution!
+	public void addToRenderingEngine(RenderingEngine renderingEngine)
 	{
 		
 	}
