@@ -45,7 +45,7 @@ public class CoreEngine
 		isRunning = true;
 		
 		int frames = 0;
-		long frameCounter = 0;
+		double frameCounter = 0;
 		
 		game.init();
 		

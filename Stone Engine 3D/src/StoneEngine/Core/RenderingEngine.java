@@ -25,12 +25,17 @@ import static org.lwjgl.opengl.GL11.glFrontFace;
 import static org.lwjgl.opengl.GL11.glGetString;
 
 import StoneEngine.Math.Vector3f;
+import StoneEngine.Rendering.Attenuation;
 import StoneEngine.Rendering.BaseLight;
 import StoneEngine.Rendering.Camera;
 import StoneEngine.Rendering.DirectionalLight;
 import StoneEngine.Rendering.ForwardAmbient;
 import StoneEngine.Rendering.ForwardDirectional;
+import StoneEngine.Rendering.ForwardPoint;
+import StoneEngine.Rendering.ForwardSpot;
+import StoneEngine.Rendering.PointLight;
 import StoneEngine.Rendering.Shader;
+import StoneEngine.Rendering.SpotLight;
 import StoneEngine.Rendering.Window;
 import StoneLabs.sutil.Debug;
 
@@ -39,6 +44,8 @@ public class RenderingEngine
 	private Camera mainCamera;
 	private Vector3f ambientLight;
 	private DirectionalLight directionalLight;
+	private PointLight pointLight;
+	private SpotLight spotLight;
 	
 
 	public RenderingEngine()
@@ -58,7 +65,13 @@ public class RenderingEngine
 		mainCamera = new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth()/(float)Window.getHeight(), 0.01f, 1000.0f);
 		
 		ambientLight = new Vector3f(0.1f, 0.1f, 0.1f);
-		directionalLight = new DirectionalLight(new BaseLight(new Vector3f(1.0f,1.0f,1.0f), 0.4f), new Vector3f(1.0f,1.0f,1.0f));
+		directionalLight = new DirectionalLight(new BaseLight(new Vector3f(1.0f,0f,0f), 0.4f), new Vector3f(1.0f,1.0f,1.0f));
+		pointLight = new PointLight(new BaseLight(new Vector3f(0f, 0f, 1.0f), 0.8f), new Attenuation(0, 0, 1), new Vector3f(3, 0f, 0), 100);
+		
+		spotLight = new SpotLight(new PointLight(new BaseLight(new Vector3f(0,1,1), 0.4f),
+				new Attenuation(0,0,0.1f),
+				new Vector3f(0,0,20), 100),
+				new Vector3f(1,0,0), 0.7f);
 	}
 	
 	public Vector3f getAmbientLight()
@@ -69,6 +82,8 @@ public class RenderingEngine
 	//Temp. hack
 	public void input(float delta)
 	{
+//		spotLight.getPointLight().setPosition(mainCamera.getPos());
+//		spotLight.setDirection(mainCamera.getForward());
 		mainCamera.input(delta);
 	}
 	
@@ -78,9 +93,13 @@ public class RenderingEngine
 
 		Shader forwardAmbient = ForwardAmbient.getInstance();
 		Shader forwardDirectional = ForwardDirectional.getInstance();
+		Shader forwardPoint = ForwardPoint.getInstance();
+		Shader forwardSpot = ForwardSpot.getInstance();
 		
 		forwardAmbient.setRenderingEngine(this);
 		forwardDirectional.setRenderingEngine(this);
+		forwardPoint.setRenderingEngine(this);
+		forwardSpot.setRenderingEngine(this);
 		
 		{ //Actual render pipeline
 			object.render(forwardAmbient);
@@ -91,6 +110,8 @@ public class RenderingEngine
 			
 			//BLENDING ZONE
 			object.render(forwardDirectional);
+			object.render(forwardPoint);
+			object.render(forwardSpot);
 			//BLENDING ZONE
 
 			glDepthFunc(GL_LESS);
@@ -140,6 +161,16 @@ public class RenderingEngine
 	public DirectionalLight getDirectionalLight()
 	{
 		return directionalLight;
+	}
+	
+	public PointLight getPointLight()
+	{
+		return pointLight;
+	}
+	
+	public SpotLight getSpotLight()
+	{
+		return spotLight;
 	}
 	
 	
