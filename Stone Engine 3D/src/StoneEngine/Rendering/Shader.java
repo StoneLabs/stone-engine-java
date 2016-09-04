@@ -63,6 +63,11 @@ public class Shader
 		addProgram(text, GL_FRAGMENT_SHADER);
 	}
 	
+	public void setAttribLocation(String attributeName, int location)
+	{
+		glBindAttribLocation(program, location, attributeName); //glsl v120
+	}
+	
 	@SuppressWarnings("deprecation")
 	public void compileShader()
 	{
