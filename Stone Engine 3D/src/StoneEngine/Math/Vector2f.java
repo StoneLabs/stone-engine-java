@@ -10,7 +10,15 @@ public class Vector2f
 		this.x = x;
 		this.y = y;
 	}
-	
+
+	public float max()
+	{
+		return Math.max(x, y);
+	}
+	public float min()
+	{
+		return Math.min(x, y);
+	}
 	public float length()
 	{
 		return (float)Math.sqrt(x*x+y*y);

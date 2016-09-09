@@ -6,6 +6,7 @@ import static org.lwjgl.opengl.GL20.*;
 
 import StoneEngine.Core.Util;
 import StoneEngine.Math.Vector3f;
+import StoneEngine.Math.Vertex;
 
 public class Mesh
 {

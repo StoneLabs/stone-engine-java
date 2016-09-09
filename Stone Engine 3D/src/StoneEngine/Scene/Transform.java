@@ -1,4 +1,4 @@
-package StoneEngine.Core;
+package StoneEngine.Scene;
 
 import StoneEngine.Math.Matrix4f;
 import StoneEngine.Math.Vector3f;

@@ -1,8 +1,9 @@
-package StoneEngine.Rendering;
+package StoneEngine.Rendering.Shading;
 
 import StoneEngine.Core.ResourceLoader;
-import StoneEngine.Core.Transform;
 import StoneEngine.Math.Matrix4f;
+import StoneEngine.Rendering.Material;
+import StoneEngine.Scene.Transform;
 
 public class BasicShader extends Shader
 {

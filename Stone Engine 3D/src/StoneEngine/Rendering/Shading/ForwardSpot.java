@@ -1,8 +1,12 @@
-package StoneEngine.Rendering;
+package StoneEngine.Rendering.Shading;
 
 import StoneEngine.Core.ResourceLoader;
-import StoneEngine.Core.Transform;
 import StoneEngine.Math.Matrix4f;
+import StoneEngine.Rendering.Material;
+import StoneEngine.Scene.Transform;
+import StoneEngine.Scene.Lighting.BaseLight;
+import StoneEngine.Scene.Lighting.PointLight;
+import StoneEngine.Scene.Lighting.SpotLight;
 
 public class ForwardSpot extends Shader
 {
@@ -59,26 +63,26 @@ public class ForwardSpot extends Shader
 		
 		setUniform("eyePos", getRenderingEngine().getMainCamera().getPos());
 		
-		setUniform("spotLight", getRenderingEngine().getSpotLight());
+		setUniformSpotLight("spotLight", (SpotLight)getRenderingEngine().getActiveLight());
 	}
 	
-	public void setUniform(String uniformName, BaseLight baseLight)
+	public void setUniformBaseLight(String uniformName, BaseLight baseLight)
 	{
 		setUniform(uniformName + ".color", baseLight.getColor());
 		setUniformf(uniformName + ".intensity", baseLight.getIntensity());
 	}
-	public void setUniform(String uniformName, PointLight pointLight)
+	public void setUniformPointLight(String uniformName, PointLight pointLight)
 	{
-		setUniform(uniformName + ".base", pointLight.getBaseLight());
-		setUniform(uniformName + ".position", pointLight.getPosition());
+		setUniformBaseLight(uniformName + ".base", pointLight);
+		setUniform(uniformName + ".position", pointLight.getGameObject().getTranslation());
 		setUniformf(uniformName + ".range", pointLight.getRange());
-		setUniformf(uniformName + ".atten.linear", pointLight.getAtten().getLinear());
-		setUniformf(uniformName + ".atten.constant", pointLight.getAtten().getConstant());
-		setUniformf(uniformName + ".atten.exponent", pointLight.getAtten().getExponent());
+		setUniformf(uniformName + ".atten.linear", pointLight.getLinear());
+		setUniformf(uniformName + ".atten.constant", pointLight.getConstant());
+		setUniformf(uniformName + ".atten.exponent", pointLight.getExponent());
 	}
-	public void setUniform(String uniformName, SpotLight spotLight)
+	public void setUniformSpotLight(String uniformName, SpotLight spotLight)
 	{
-		setUniform(uniformName + ".pointLight", spotLight.getPointLight());
+		setUniformPointLight(uniformName + ".pointLight", spotLight);
 		setUniform(uniformName + ".direction", spotLight.getDirection());
 		setUniformf(uniformName + ".cutoff", spotLight.getCutoff());
 	}

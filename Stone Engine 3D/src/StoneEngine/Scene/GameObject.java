@@ -1,20 +1,21 @@
-package StoneEngine.Core;
+package StoneEngine.Scene;
 
 import java.util.ArrayList;
 
-import StoneEngine.Rendering.Shader;
+import StoneEngine.Rendering.RenderingEngine;
+import StoneEngine.Rendering.Shading.Shader;
 
-public class GameObject
+public class GameObject extends Transform //extends Transform is an experimental construct
 {
 	private ArrayList<GameObject> children;
 	private ArrayList<GameComponent> components;
-	private Transform transform;
+//	private Transform transform;
 	
 	public GameObject()
 	{
 		children = new ArrayList<GameObject>();
 		components = new ArrayList<GameComponent>();
-		transform = new Transform();
+//		transform = new Transform();
 	}
 	
 	public void addChild(GameObject child)
@@ -25,12 +26,13 @@ public class GameObject
 	public void addComponent(GameComponent component)
 	{
 		components.add(component);
+		component.setParent(this);
 	}
 	
 	public void input(float delta)
 	{
 		for (GameComponent component : components)
-			component.input(transform, delta);
+			component.input(delta);
 		
 		for (GameObject child : children)
 			child.input(delta);
@@ -38,7 +40,7 @@ public class GameObject
 	public void update(float delta)
 	{
 		for (GameComponent component : components)
-			component.update(transform, delta);
+			component.update(delta);
 		
 		for (GameObject child : children)
 			child.update(delta);
@@ -46,12 +48,22 @@ public class GameObject
 	public void render(Shader shader)
 	{
 		for (GameComponent component : components)
-			component.render(transform, shader);
+			component.render(shader);
 		
 		for (GameObject child : children)
 			child.render(shader);
 	}
 
-	public Transform getTransform() 
-	{ return transform;	}
+	//Temporary solution!
+	public void addToRenderingEngine(RenderingEngine renderingEngine)
+	{
+		for (GameComponent component : components)
+			component.addToRenderingEngine(renderingEngine);
+		
+		for (GameObject child : children)
+			child.addToRenderingEngine(renderingEngine);
+	}
+
+//	public Transform getTransform() 
+//	{ return transform;	}
 }

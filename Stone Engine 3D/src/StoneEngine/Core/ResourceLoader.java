@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import org.newdawn.slick.opengl.TextureLoader;
 
 import StoneEngine.Math.Vector3f;
+import StoneEngine.Math.Vertex;
 import StoneEngine.Rendering.Mesh;
 import StoneEngine.Rendering.Texture;
-import StoneEngine.Rendering.Vertex;
 import StoneLabs.sutil.Debug;
 
 public class ResourceLoader
