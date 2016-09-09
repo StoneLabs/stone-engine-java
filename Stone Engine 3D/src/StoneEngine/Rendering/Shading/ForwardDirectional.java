@@ -1,11 +1,11 @@
 package StoneEngine.Rendering.Shading;
 
-import StoneEngine.Components.Lighting.BaseLight;
-import StoneEngine.Components.Lighting.DirectionalLight;
 import StoneEngine.Core.ResourceLoader;
-import StoneEngine.Core.Transform;
 import StoneEngine.Math.Matrix4f;
 import StoneEngine.Rendering.Material;
+import StoneEngine.Scene.Transform;
+import StoneEngine.Scene.Lighting.BaseLight;
+import StoneEngine.Scene.Lighting.DirectionalLight;
 
 public class ForwardDirectional extends Shader
 {

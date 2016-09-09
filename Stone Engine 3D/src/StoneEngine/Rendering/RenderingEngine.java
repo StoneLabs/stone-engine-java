@@ -26,14 +26,14 @@ import static org.lwjgl.opengl.GL11.glGetString;
 
 import java.util.ArrayList;
 
-import StoneEngine.Components.Lighting.BaseLight;
-import StoneEngine.Core.GameObject;
 import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.Shading.ForwardAmbient;
 import StoneEngine.Rendering.Shading.ForwardDirectional;
 import StoneEngine.Rendering.Shading.ForwardPoint;
 import StoneEngine.Rendering.Shading.ForwardSpot;
 import StoneEngine.Rendering.Shading.Shader;
+import StoneEngine.Scene.GameObject;
+import StoneEngine.Scene.Lighting.BaseLight;
 import StoneLabs.sutil.Debug;
 
 public class RenderingEngine

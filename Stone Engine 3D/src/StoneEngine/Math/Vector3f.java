@@ -20,7 +20,14 @@ public class Vector3f
 		this.z = z;
 	}
 	
-
+	public float max()
+	{
+		return Math.max(x, Math.max(y, z));
+	}
+	public float min()
+	{
+		return Math.min(x, Math.max(y, z));
+	}
 	public float length()
 	{
 		return (float)Math.sqrt(x*x+y*y+z*z);

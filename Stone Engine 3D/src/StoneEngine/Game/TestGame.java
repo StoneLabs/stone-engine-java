@@ -1,17 +1,10 @@
 package StoneEngine.Game;
 
 import StoneEngine.Core.Input;
-import StoneEngine.Components.MeshRenderer;
-import StoneEngine.Components.Lighting.BaseLight;
-import StoneEngine.Components.Lighting.DirectionalLight;
-import StoneEngine.Components.Lighting.PointLight;
-import StoneEngine.Components.Lighting.SpotLight;
 import StoneEngine.Core.CoreEngine;
 import StoneEngine.Core.Game;
-import StoneEngine.Core.GameObject;
 import StoneEngine.Core.ResourceLoader;
 import StoneEngine.Core.Time;
-import StoneEngine.Core.Transform;
 import StoneEngine.Math.Vector2f;
 import StoneEngine.Math.Vector3f;
 import StoneEngine.Math.Vertex;
@@ -20,6 +13,13 @@ import StoneEngine.Rendering.Material;
 import StoneEngine.Rendering.Mesh;
 import StoneEngine.Rendering.Window;
 import StoneEngine.Rendering.Shading.Shader;
+import StoneEngine.Scene.GameObject;
+import StoneEngine.Scene.Transform;
+import StoneEngine.Scene.Lighting.BaseLight;
+import StoneEngine.Scene.Lighting.DirectionalLight;
+import StoneEngine.Scene.Lighting.PointLight;
+import StoneEngine.Scene.Lighting.SpotLight;
+import StoneEngine.Scene.Miscellaneous.MeshRenderer;
 import StoneLabs.sutil.Debug;
 
 @SuppressWarnings("unused") //TODO REMOVE
@@ -45,16 +45,16 @@ public class TestGame extends Game
 
 		GameObject planeObject = new GameObject();
 		planeObject.addComponent(meshRenderer);
-		planeObject.getTransform().setTranslation(0, -1, 5);
+		planeObject.setTranslation(0, -1, 5);
 
 		DirectionalLight directionalLight1 = new DirectionalLight(new Vector3f(1.0f,0f,0f), 0.4f, new Vector3f(1.0f,1.0f,1.0f));
-		PointLight pointLight1 = new PointLight(new Vector3f(0f, 0f, 1.0f), 0.8f, 0, 0, 1, new Vector3f(3, 1f, 0), 100);
+		PointLight pointLight1 = new PointLight(new Vector3f(0f, 0f, 1.0f), 1.0f, 0, 0, 0.5f);
 		SpotLight spotLight1 = new SpotLight(
 			new Vector3f(0,1,1), 0.4f,0,0,0.1f,
-			new Vector3f(0,0,20), 100,
 			new Vector3f(1,0,0), 0.7f);
 		
 		GameObject directionalLightTest = new GameObject();
+		directionalLightTest.setTranslation(2, 0, 0);
 		directionalLightTest.addComponent(directionalLight1);
 		directionalLightTest.addComponent(pointLight1);
 		directionalLightTest.addComponent(spotLight1);

@@ -1,4 +1,4 @@
-package StoneEngine.Components.Lighting;
+package StoneEngine.Scene.Lighting;
 
 import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.RenderingEngine;

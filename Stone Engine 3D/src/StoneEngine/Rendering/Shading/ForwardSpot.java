@@ -1,12 +1,12 @@
 package StoneEngine.Rendering.Shading;
 
-import StoneEngine.Components.Lighting.BaseLight;
-import StoneEngine.Components.Lighting.PointLight;
-import StoneEngine.Components.Lighting.SpotLight;
 import StoneEngine.Core.ResourceLoader;
-import StoneEngine.Core.Transform;
 import StoneEngine.Math.Matrix4f;
 import StoneEngine.Rendering.Material;
+import StoneEngine.Scene.Transform;
+import StoneEngine.Scene.Lighting.BaseLight;
+import StoneEngine.Scene.Lighting.PointLight;
+import StoneEngine.Scene.Lighting.SpotLight;
 
 public class ForwardSpot extends Shader
 {
@@ -74,7 +74,7 @@ public class ForwardSpot extends Shader
 	public void setUniformPointLight(String uniformName, PointLight pointLight)
 	{
 		setUniformBaseLight(uniformName + ".base", pointLight);
-		setUniform(uniformName + ".position", pointLight.getPosition());
+		setUniform(uniformName + ".position", pointLight.getGameObject().getTranslation());
 		setUniformf(uniformName + ".range", pointLight.getRange());
 		setUniformf(uniformName + ".atten.linear", pointLight.getLinear());
 		setUniformf(uniformName + ".atten.constant", pointLight.getConstant());

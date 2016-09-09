@@ -5,12 +5,12 @@ import static org.lwjgl.opengl.GL32.*;
 
 import java.util.HashMap;
 
-import StoneEngine.Core.Transform;
 import StoneEngine.Core.Util;
 import StoneEngine.Math.Matrix4f;
 import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.Material;
 import StoneEngine.Rendering.RenderingEngine;
+import StoneEngine.Scene.Transform;
 import StoneLabs.sutil.Debug;
 
 public class Shader

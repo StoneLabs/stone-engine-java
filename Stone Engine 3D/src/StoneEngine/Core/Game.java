@@ -1,5 +1,7 @@
 package StoneEngine.Core;
 
+import StoneEngine.Scene.GameObject;
+
 public abstract class Game
 {
 	private GameObject root;
