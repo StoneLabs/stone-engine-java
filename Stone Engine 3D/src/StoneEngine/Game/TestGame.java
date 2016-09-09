@@ -1,10 +1,11 @@
 package StoneEngine.Game;
 
 import StoneEngine.Core.Input;
-import StoneEngine.Components.DirectionalLight;
 import StoneEngine.Components.MeshRenderer;
-import StoneEngine.Components.PointLight;
-import StoneEngine.Components.SpotLight;
+import StoneEngine.Components.Lighting.BaseLight;
+import StoneEngine.Components.Lighting.DirectionalLight;
+import StoneEngine.Components.Lighting.PointLight;
+import StoneEngine.Components.Lighting.SpotLight;
 import StoneEngine.Core.CoreEngine;
 import StoneEngine.Core.Game;
 import StoneEngine.Core.GameObject;
@@ -13,21 +14,17 @@ import StoneEngine.Core.Time;
 import StoneEngine.Core.Transform;
 import StoneEngine.Math.Vector2f;
 import StoneEngine.Math.Vector3f;
-import StoneEngine.Rendering.Attenuation;
-import StoneEngine.Rendering.BaseLight;
+import StoneEngine.Math.Vertex;
 import StoneEngine.Rendering.Camera;
 import StoneEngine.Rendering.Material;
 import StoneEngine.Rendering.Mesh;
-import StoneEngine.Rendering.PhongShader;
-import StoneEngine.Rendering.Shader;
-import StoneEngine.Rendering.Vertex;
 import StoneEngine.Rendering.Window;
+import StoneEngine.Rendering.Shading.Shader;
 import StoneLabs.sutil.Debug;
 
+@SuppressWarnings("unused") //TODO REMOVE
 public class TestGame extends Game
 {
-	private Camera camera;
-
 	public void init()
 	{
 		float fieldDepth = 10.0f;
@@ -50,11 +47,11 @@ public class TestGame extends Game
 		planeObject.addComponent(meshRenderer);
 		planeObject.getTransform().setTranslation(0, -1, 5);
 
-		DirectionalLight directionalLight1 = new DirectionalLight(new BaseLight(new Vector3f(1.0f,0f,0f), 0.4f), new Vector3f(1.0f,1.0f,1.0f));
-		PointLight pointLight1 = new PointLight(new BaseLight(new Vector3f(0f, 0f, 1.0f), 0.8f), new Attenuation(0, 0, 1), new Vector3f(3, 0f, 0), 100);
-		SpotLight spotLight1 = new SpotLight(new PointLight(new BaseLight(new Vector3f(0,1,1), 0.4f),
-			new Attenuation(0,0,0.1f),
-			new Vector3f(0,0,20), 100),
+		DirectionalLight directionalLight1 = new DirectionalLight(new Vector3f(1.0f,0f,0f), 0.4f, new Vector3f(1.0f,1.0f,1.0f));
+		PointLight pointLight1 = new PointLight(new Vector3f(0f, 0f, 1.0f), 0.8f, 0, 0, 1, new Vector3f(3, 1f, 0), 100);
+		SpotLight spotLight1 = new SpotLight(
+			new Vector3f(0,1,1), 0.4f,0,0,0.1f,
+			new Vector3f(0,0,20), 100,
 			new Vector3f(1,0,0), 0.7f);
 		
 		GameObject directionalLightTest = new GameObject();

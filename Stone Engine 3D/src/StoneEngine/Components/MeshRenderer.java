@@ -1,10 +1,10 @@
 package StoneEngine.Components;
 
 import StoneEngine.Core.Transform;
-import StoneEngine.Rendering.BasicShader;
 import StoneEngine.Rendering.Material;
 import StoneEngine.Rendering.Mesh;
-import StoneEngine.Rendering.Shader;
+import StoneEngine.Rendering.Shading.BasicShader;
+import StoneEngine.Rendering.Shading.Shader;
 
 public class MeshRenderer extends GameComponent
 {

@@ -1,9 +1,11 @@
-package StoneEngine.Rendering;
+package StoneEngine.Rendering.Shading;
 
-import StoneEngine.Components.DirectionalLight;
+import StoneEngine.Components.Lighting.BaseLight;
+import StoneEngine.Components.Lighting.DirectionalLight;
 import StoneEngine.Core.ResourceLoader;
 import StoneEngine.Core.Transform;
 import StoneEngine.Math.Matrix4f;
+import StoneEngine.Rendering.Material;
 
 public class ForwardDirectional extends Shader
 {
@@ -53,18 +55,18 @@ public class ForwardDirectional extends Shader
 		setUniformf("specularExponent", material.getSpecularExponent());
 		
 		setUniform("eyePos", getRenderingEngine().getMainCamera().getPos());
-		setUniform("directionalLight", getRenderingEngine().getDirectionalLight());
+		setUniformDirectionalLight("directionalLight", (DirectionalLight)getRenderingEngine().getActiveLight());
 	}
 	
-	public void setUniform(String uniformName, BaseLight baseLight)
+	public void setUniformBaseLight(String uniformName, BaseLight baseLight)
 	{
 		setUniform(uniformName + ".color", baseLight.getColor());
 		setUniformf(uniformName + ".intensity", baseLight.getIntensity());
 	}
 	
-	public void setUniform(String uniformName, DirectionalLight directionalLight)
+	public void setUniformDirectionalLight(String uniformName, DirectionalLight directionalLight)
 	{
-		setUniform(uniformName + ".base", directionalLight.getBase());
+		setUniformBaseLight(uniformName + ".base", directionalLight);
 		setUniform(uniformName + ".direction", directionalLight.getDirection());
 	}
 }

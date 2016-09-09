@@ -8,7 +8,7 @@ import java.util.Arrays;
 import org.lwjgl.BufferUtils;
 
 import StoneEngine.Math.Matrix4f;
-import StoneEngine.Rendering.Vertex;
+import StoneEngine.Math.Vertex;
 
 public class Util
 {

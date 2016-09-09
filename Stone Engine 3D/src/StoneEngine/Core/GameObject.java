@@ -3,7 +3,8 @@ package StoneEngine.Core;
 import java.util.ArrayList;
 
 import StoneEngine.Components.GameComponent;
-import StoneEngine.Rendering.Shader;
+import StoneEngine.Rendering.RenderingEngine;
+import StoneEngine.Rendering.Shading.Shader;
 
 public class GameObject
 {

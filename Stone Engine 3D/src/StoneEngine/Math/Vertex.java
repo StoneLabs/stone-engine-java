@@ -1,7 +1,4 @@
-package StoneEngine.Rendering;
-
-import StoneEngine.Math.Vector2f;
-import StoneEngine.Math.Vector3f;
+package StoneEngine.Math;
 
 public class Vertex
 {

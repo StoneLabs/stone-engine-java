@@ -1,9 +1,11 @@
-package StoneEngine.Rendering;
+package StoneEngine.Rendering.Shading;
 
-import StoneEngine.Components.PointLight;
+import StoneEngine.Components.Lighting.BaseLight;
+import StoneEngine.Components.Lighting.PointLight;
 import StoneEngine.Core.ResourceLoader;
 import StoneEngine.Core.Transform;
 import StoneEngine.Math.Matrix4f;
+import StoneEngine.Rendering.Material;
 
 public class ForwardPoint extends Shader
 {
@@ -58,22 +60,22 @@ public class ForwardPoint extends Shader
 		
 		setUniform("eyePos", getRenderingEngine().getMainCamera().getPos());
 		
-		setUniform("pointLight", getRenderingEngine().getPointLight());
+		setUniformPointLight("pointLight", (PointLight)getRenderingEngine().getActiveLight());
 	}
 	
-	public void setUniform(String uniformName, BaseLight baseLight)
+	public void setUniformBaseLight(String uniformName, BaseLight baseLight)
 	{
 		setUniform(uniformName + ".color", baseLight.getColor());
 		setUniformf(uniformName + ".intensity", baseLight.getIntensity());
 	}
 
-	public void setUniform(String uniformName, PointLight pointLight)
+	public void setUniformPointLight(String uniformName, PointLight pointLight)
 	{
-		setUniform(uniformName + ".base", pointLight.getBaseLight());
+		setUniformBaseLight(uniformName + ".base", pointLight);
 		setUniform(uniformName + ".position", pointLight.getPosition());
 		setUniformf(uniformName + ".range", pointLight.getRange());
-		setUniformf(uniformName + ".atten.linear", pointLight.getAtten().getLinear());
-		setUniformf(uniformName + ".atten.constant", pointLight.getAtten().getConstant());
-		setUniformf(uniformName + ".atten.exponent", pointLight.getAtten().getExponent());
+		setUniformf(uniformName + ".atten.linear", pointLight.getLinear());
+		setUniformf(uniformName + ".atten.constant", pointLight.getConstant());
+		setUniformf(uniformName + ".atten.exponent", pointLight.getExponent());
 	}
 }
