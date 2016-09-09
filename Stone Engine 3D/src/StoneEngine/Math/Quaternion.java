@@ -3,14 +3,29 @@ package StoneEngine.Math;
 public class Quaternion 
 {
 	private float x, y, z, w;
-	
-
+		
+	public Quaternion()
+	{
+		this(0,0,0,1);
+	}
 	public Quaternion(float x, float y, float z, float w)
 	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.w = w;
+	}
+	public static Quaternion rotation(Vector3f axis, float angle)
+	{
+		float sinHalfAngle = (float)Math.sin(Math.toRadians(angle/2));
+		float cosHalfAngle = (float)Math.cos(Math.toRadians(angle/2));
+		
+		float rX = axis.getX() * sinHalfAngle;
+		float rY = axis.getY() * sinHalfAngle;
+		float rZ = axis.getZ() * sinHalfAngle;
+		float rW = cosHalfAngle;
+		
+		return new Quaternion(rX, rY, rZ, rW);
 	}
 	
 	public float length()
@@ -50,6 +65,41 @@ public class Quaternion
 		float z_ =  w * r.getZ() + x * r.getY() - y * r.getX();
 		
 		return new Quaternion(x_, y_, z_, w_);
+	}
+	
+	public Vector3f getForward()
+	{
+		return new Vector3f(2.0f * (x*z - w*y), 2.0f * (y*z + w*x), 1.0f - 2.0f * (x*x + y*y));
+	}
+
+	public Vector3f getBack()
+	{
+		return new Vector3f(-2.0f * (x*z - w*y), -2.0f * (y*z + w*x), -(1.0f - 2.0f * (x*x + y*y)));
+	}
+
+	public Vector3f getUp()
+	{
+		return new Vector3f(2.0f * (x*y + w*z), 1.0f - 2.0f * (x*x + z*z), 2.0f * (y*z - w*x));
+	}
+
+	public Vector3f getDown()
+	{
+		return new Vector3f(-2.0f * (x*y + w*z), -(1.0f - 2.0f * (x*x + z*z)), -2.0f * (y*z - w*x));
+	}
+
+	public Vector3f getRight()
+	{
+		return new Vector3f(1.0f - 2.0f * (y*y + z*z), 2.0f * (x*y - w*z), 2.0f * (x*z + w*y));
+	}
+
+	public Vector3f getLeft()
+	{
+		return new Vector3f(-(1.0f - 2.0f * (y*y + z*z)), -2.0f * (x*y - w*z), -2.0f * (x*z + w*y));
+	}
+	
+	public Matrix4f toRotationMatrix()
+	{
+		return Matrix4f.rotation(getForward(), getUp(), getRight());
 	}
 	
 	public float getX() {

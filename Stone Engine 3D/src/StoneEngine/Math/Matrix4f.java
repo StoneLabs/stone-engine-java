@@ -75,19 +75,22 @@ public class Matrix4f
 	}
 	public static Matrix4f rotation(Vector3f forward, Vector3f up)
 	{
-		Vector3f f = forward.normalize();
+		Vector3f f = forward;
 		
-		Vector3f r = up.normalize();
+		Vector3f r = up;
 		r = r.cross(f);
 		
 		Vector3f u = f.cross(r);
-		
-		
+
+		return rotation(f,u,r);
+	}
+	public static Matrix4f rotation(Vector3f forward, Vector3f up, Vector3f right)
+	{
 		float[][] m = new float[][] {
-				{r.getX()	,r.getY()	,r.getZ()	,0},
-				{u.getX()	,u.getY()	,u.getZ()	,0},
-				{f.getX()	,f.getY()	,f.getZ()	,0},
-				{0			,0			,0			,1}};
+				{right.getX()	,right.getY()	,right.getZ()	,0},
+				{up.getX()		,up.getY()		,up.getZ()		,0},
+				{forward.getX()	,forward.getY()	,forward.getZ()	,0},
+				{0				,0				,0				,1}};
 
 		return new Matrix4f(m);
 	}

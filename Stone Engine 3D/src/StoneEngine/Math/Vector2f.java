@@ -107,6 +107,11 @@ public class Vector2f
 		this.y = y;
 	}
 	
+	public void set(float x, float y)
+	{
+		this.x = x; this.y = y;
+	}
+	
 	public boolean equals(Vector2f other)
 	{
 		return  x == other.x &&

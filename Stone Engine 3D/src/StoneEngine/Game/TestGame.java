@@ -5,6 +5,7 @@ import StoneEngine.Core.CoreEngine;
 import StoneEngine.Core.Game;
 import StoneEngine.Core.ResourceLoader;
 import StoneEngine.Core.Time;
+import StoneEngine.Math.Quaternion;
 import StoneEngine.Math.Vector2f;
 import StoneEngine.Math.Vector3f;
 import StoneEngine.Math.Vertex;
@@ -47,14 +48,14 @@ public class TestGame extends Game
 		planeObject.addComponent(meshRenderer);
 		planeObject.setTranslation(0, -1, 5);
 
-		DirectionalLight directionalLight1 = new DirectionalLight(new Vector3f(1.0f,0f,0f), 0.4f, new Vector3f(1.0f,1.0f,1.0f));
+		DirectionalLight directionalLight1 = new DirectionalLight(new Vector3f(1.0f,0f,0f), 0.4f, new Vector3f(0.0f,1.0f,0.0f));
 		PointLight pointLight1 = new PointLight(new Vector3f(0f, 0f, 1.0f), 1.0f, 0, 0, 0.5f);
 		SpotLight spotLight1 = new SpotLight(
-			new Vector3f(0,1,1), 0.4f,0,0,0.1f,
-			new Vector3f(1,0,0), 0.7f);
+			new Vector3f(0,1,1), 0.4f,0,0,0.1f, 0.7f);
 		
 		GameObject directionalLightTest = new GameObject();
 		directionalLightTest.setTranslation(2, 0, 0);
+		directionalLightTest.setRotation(Quaternion.rotation(new Vector3f(0,1,0), -90));
 		directionalLightTest.addComponent(directionalLight1);
 		directionalLightTest.addComponent(pointLight1);
 		directionalLightTest.addComponent(spotLight1);

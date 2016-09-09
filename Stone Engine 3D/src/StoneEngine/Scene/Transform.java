@@ -1,20 +1,21 @@
 package StoneEngine.Scene;
 
 import StoneEngine.Math.Matrix4f;
+import StoneEngine.Math.Quaternion;
 import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.Camera;
 
 public class Transform 
 {	
 	private Vector3f translation;
-	private Vector3f rotation;
+	private Quaternion rotation;
 	private Vector3f scale;
 
 
 	public Transform()
 	{
 		translation = new Vector3f(0,0,0);
-		rotation	= new Vector3f(0,0,0);
+		rotation	= new Quaternion(0,0,0,1);
 		scale		= new Vector3f(1,1,1);
 	}
 	
@@ -25,11 +26,9 @@ public class Transform
 				this.translation.getY(), 
 				this.translation.getZ())
 				;
-		Matrix4f rotation = Matrix4f.rotation(
-				this.rotation.getX(), 
-				this.rotation.getY(),  
-				this.rotation.getZ())
-				;
+		
+		Matrix4f rotation = this.rotation.toRotationMatrix();
+		
 		Matrix4f scale = Matrix4f.scale(
 				this.scale.getX(), 
 				this.scale.getY(),  
@@ -46,17 +45,17 @@ public class Transform
 		this.translation = translation;
 	}
 	public void setTranslation(float x, float y, float z) {
-		this.translation = new Vector3f(x,y,z);
+		this.translation.set(x,y,z);
 	}
-	public Vector3f getRotation() {
+	public Quaternion getRotation() {
 		return rotation;
 	}
-	public void setRotation(Vector3f rotation) {
+	public void setRotation(Quaternion rotation) {
 		this.rotation = rotation;
 	}
-	public void setRotation(float x, float y, float z) {
-		this.rotation = new Vector3f(x,y,z);
-	}
+//	public void setRotation(float x, float y, float z) {
+//		this.rotation = new Vector3f(x,y,z);
+//	}
 	public Vector3f getScale() {
 		return scale;
 	}
@@ -64,6 +63,6 @@ public class Transform
 		this.scale = scale;
 	}
 	public void setScale(float x, float y, float z) {
-		this.scale = new Vector3f(x,y,z);
+		this.scale.set(x,y,z);
 	}
 }
