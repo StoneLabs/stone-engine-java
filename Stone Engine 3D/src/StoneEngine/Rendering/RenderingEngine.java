@@ -34,6 +34,7 @@ import StoneEngine.Rendering.Shading.ForwardSpot;
 import StoneEngine.Rendering.Shading.Shader;
 import StoneEngine.Scene.GameObject;
 import StoneEngine.Scene.Lighting.BaseLight;
+import StoneEngine.Scene.Rendering.Camera;
 import StoneLabs.sutil.Debug;
 
 public class RenderingEngine
@@ -60,7 +61,7 @@ public class RenderingEngine
 		glEnable(GL_TEXTURE_2D);
 //		glEnable(GL_FRAMEBUFFER_SRGB);
 		
-		mainCamera = new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth()/(float)Window.getHeight(), 0.01f, 1000.0f);
+//		mainCamera = new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth()/(float)Window.getHeight(), 0.01f, 1000.0f);
 		
 		ambientLight = new Vector3f(0.1f, 0.1f, 0.1f);
 	}
@@ -69,22 +70,7 @@ public class RenderingEngine
 	{
 		return ambientLight;
 	}
-	
-	//Temp. hack
-	public void input(float delta)
-	{
-//		spotLight.getPointLight().setPosition(mainCamera.getPos());
-//		spotLight.setDirection(mainCamera.getForward());
-		mainCamera.input(delta);
-	}
-	
-//	private void clearLightList()
-//	{
-//		directionalLights.clear();
-//		pointLights.clear();
-//		spotLights.clear();
-//	}
-	
+		
 	public void render(GameObject object)
 	{
 		clearScreen();
@@ -151,42 +137,12 @@ public class RenderingEngine
 	public Camera getMainCamera()
 	{
 		return mainCamera;
-	}
+	}	
 
-	public void setMainCamera(Camera mainCamera)
+	public void addCamera(Camera camera)
 	{
-		this.mainCamera = mainCamera;
+		this.mainCamera = camera;
 	}
-	
-//	public DirectionalLight getDirectionalLight()
-//	{
-//		return activeDirectionalLight;
-//	}
-//	
-//	public PointLight getPointLight()
-//	{
-//		return activePointLight;
-//	}
-//	
-//	public SpotLight getSpotLight()
-//	{
-//		return activeSpotLight;
-//	}
-//	
-//	public void addDirectionalLight(DirectionalLight directionalLight)
-//	{
-//		directionalLights.add(directionalLight);
-//	}
-//	
-//	public void addPointLight(PointLight pointLight)
-//	{
-//		pointLights.add(pointLight);
-//	}
-//	
-//	public void addSpotLight(SpotLight spotLight)
-//	{
-//		spotLights.add(spotLight);
-//	}
 	
 	public void addLight(BaseLight light)
 	{

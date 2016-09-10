@@ -75,19 +75,22 @@ public class Matrix4f
 	}
 	public static Matrix4f rotation(Vector3f forward, Vector3f up)
 	{
-		Vector3f f = forward.normalize();
+		Vector3f f = forward;
 		
-		Vector3f r = up.normalize();
+		Vector3f r = up;
 		r = r.cross(f);
 		
 		Vector3f u = f.cross(r);
-		
-		
+
+		return rotation(f,u,r);
+	}
+	public static Matrix4f rotation(Vector3f forward, Vector3f up, Vector3f right)
+	{
 		float[][] m = new float[][] {
-				{r.getX()	,r.getY()	,r.getZ()	,0},
-				{u.getX()	,u.getY()	,u.getZ()	,0},
-				{f.getX()	,f.getY()	,f.getZ()	,0},
-				{0			,0			,0			,1}};
+				{right.getX()	,right.getY()	,right.getZ()	,0},
+				{up.getX()		,up.getY()		,up.getZ()		,0},
+				{forward.getX()	,forward.getY()	,forward.getZ()	,0},
+				{0				,0				,0				,1}};
 
 		return new Matrix4f(m);
 	}
@@ -117,6 +120,15 @@ public class Matrix4f
 		Matrix4f ry_ = new Matrix4f(ry);
 		Matrix4f rz_ = new Matrix4f(rz);
 		return rz_.mul(ry_.mul(rx_));
+	}
+	
+	public Vector3f transform(Vector3f r)
+	{
+		return new Vector3f(
+				m[0][0] * r.getX() + m[0][1] * r.getY() + m[0][2] * r.getZ() + m[0][3],
+				m[1][0] * r.getX() + m[1][1] * r.getY() + m[1][2] * r.getZ() + m[1][3],
+				m[2][0] * r.getX() + m[2][1] * r.getY() + m[2][2] * r.getZ() + m[2][3])
+				;
 	}
 	
 	public Matrix4f mul(Matrix4f r)

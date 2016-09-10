@@ -1,4 +1,4 @@
-package StoneEngine.Scene.Miscellaneous;
+package StoneEngine.Scene.Rendering;
 
 import StoneEngine.Rendering.Material;
 import StoneEngine.Rendering.Mesh;

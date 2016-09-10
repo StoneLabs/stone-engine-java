@@ -8,10 +8,6 @@ public abstract class Game
 	
 	public void init() {}
 	
-	public void input(float delta)
-	{
-		getRootObject().input(delta);
-	}
 	public void update(float delta)
 	{
 		getRootObject().update(delta);

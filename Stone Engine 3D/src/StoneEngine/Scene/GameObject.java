@@ -2,25 +2,28 @@ package StoneEngine.Scene;
 
 import java.util.ArrayList;
 
+import StoneEngine.Math.Matrix4f;
+import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.RenderingEngine;
 import StoneEngine.Rendering.Shading.Shader;
 
 public class GameObject extends Transform //extends Transform is an experimental construct
 {
+	private GameObject parent = null;
+	
 	private ArrayList<GameObject> children;
 	private ArrayList<GameComponent> components;
-//	private Transform transform;
 	
 	public GameObject()
 	{
 		children = new ArrayList<GameObject>();
 		components = new ArrayList<GameComponent>();
-//		transform = new Transform();
 	}
 	
 	public void addChild(GameObject child)
 	{
 		children.add(child);
+		child.setParent(this);
 	}
 	
 	public void addComponent(GameComponent component)
@@ -29,16 +32,10 @@ public class GameObject extends Transform //extends Transform is an experimental
 		component.setParent(this);
 	}
 	
-	public void input(float delta)
-	{
-		for (GameComponent component : components)
-			component.input(delta);
-		
-		for (GameObject child : children)
-			child.input(delta);
-	}
 	public void update(float delta)
 	{
+		super.update();
+		
 		for (GameComponent component : components)
 			component.update(delta);
 		
@@ -46,7 +43,7 @@ public class GameObject extends Transform //extends Transform is an experimental
 			child.update(delta);
 	}
 	public void render(Shader shader)
-	{
+	{		
 		for (GameComponent component : components)
 			component.render(shader);
 		
@@ -64,6 +61,24 @@ public class GameObject extends Transform //extends Transform is an experimental
 			child.addToRenderingEngine(renderingEngine);
 	}
 
-//	public Transform getTransform() 
-//	{ return transform;	}
+	public void move(Vector3f dir, float amnt)
+	{
+		this.setTranslation(
+				this.getTranslation().add(
+						dir.mul(amnt)));
+	}
+	public void move(Vector3f amnt)
+	{
+		this.setTranslation(
+				this.getTranslation().add(amnt));
+	}
+
+	public GameObject getParent() {
+		return parent;
+	}
+
+	private void setParent(GameObject parent) {
+		this.parent = parent;
+		super.setParent(parent);
+	}
 }

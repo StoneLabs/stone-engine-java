@@ -6,12 +6,7 @@ import StoneEngine.Rendering.Shading.Shader;
 public abstract class GameComponent
 {
 	private GameObject parent;
-	
-	public void input(float delta)
-	{
 		
-	}
-	
 	public void update(float delta)
 	{
 		
