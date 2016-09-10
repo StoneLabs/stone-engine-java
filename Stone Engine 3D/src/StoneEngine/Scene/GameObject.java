@@ -2,6 +2,7 @@ package StoneEngine.Scene;
 
 import java.util.ArrayList;
 
+import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.RenderingEngine;
 import StoneEngine.Rendering.Shading.Shader;
 
@@ -64,6 +65,15 @@ public class GameObject extends Transform //extends Transform is an experimental
 			child.addToRenderingEngine(renderingEngine);
 	}
 
-//	public Transform getTransform() 
-//	{ return transform;	}
+	public void move(Vector3f dir, float amnt)
+	{
+		this.setTranslation(
+				this.getTranslation().add(
+						dir.mul(amnt)));
+	}
+	public void move(Vector3f amnt)
+	{
+		this.setTranslation(
+				this.getTranslation().add(amnt));
+	}
 }

@@ -76,7 +76,6 @@ public class CoreEngine
 //				Time.setDelta(frameTime);
 				
 				game.input(frameTime);
-				renderingEngine.input(frameTime); //tmp hack
 				Input.update();
 				
 				game.update(frameTime);

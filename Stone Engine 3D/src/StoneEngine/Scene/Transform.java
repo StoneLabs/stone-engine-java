@@ -3,7 +3,7 @@ package StoneEngine.Scene;
 import StoneEngine.Math.Matrix4f;
 import StoneEngine.Math.Quaternion;
 import StoneEngine.Math.Vector3f;
-import StoneEngine.Rendering.Camera;
+import StoneEngine.Scene.Rendering.Camera;
 
 public class Transform 
 {	

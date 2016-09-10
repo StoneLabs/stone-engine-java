@@ -17,8 +17,8 @@ public class Quaternion
 	}
 	public static Quaternion rotation(Vector3f axis, float angle)
 	{
-		float sinHalfAngle = (float)Math.sin(Math.toRadians(angle/2));
-		float cosHalfAngle = (float)Math.cos(Math.toRadians(angle/2));
+		float sinHalfAngle = (float)Math.sin(angle/2);
+		float cosHalfAngle = (float)Math.cos(angle/2);
 		
 		float rX = axis.getX() * sinHalfAngle;
 		float rY = axis.getY() * sinHalfAngle;

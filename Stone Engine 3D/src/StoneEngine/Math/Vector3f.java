@@ -2,14 +2,11 @@ package StoneEngine.Math;
 
 public class Vector3f 
 {
-	public static final Vector3f NULL()
-	{
-		return new Vector3f(0,0,0);
-	}
-	public static final Vector3f YAXIS()
-	{
-		return new Vector3f(0,1,0);
-	}
+	public static final Vector3f NULL()		{ return new Vector3f(0,0,0); }
+	public static final Vector3f XAXIS() 	{ return new Vector3f(1,0,0); }
+	public static final Vector3f YAXIS() 	{ return new Vector3f(0,1,0); }
+	public static final Vector3f ZAXIS() 	{ return new Vector3f(0,0,1); }
+	public static final Vector3f IDENTITY()	{ return new Vector3f(1,1,1); }
 	
 	private float x,y,z;
 	
@@ -51,9 +48,20 @@ public class Vector3f
 		return new Vector3f(x / length, y / length, z / length);
 	}
 	
-	public Vector3f rotate(float angle, Vector3f axis)
+	public Vector3f rotate(Vector3f axis, float angle)
 	{
-		Quaternion rotation = Quaternion.rotation(axis, angle);
+		float sinAngle = (float)Math.sin(-angle);
+		float cosAngle = (float)Math.cos(-angle);
+		
+		return this.cross(axis.mul(sinAngle)).add(					//rotate local X
+				(this.mul(cosAngle)).add(							//rotate local Y
+						axis.mul(this.dot(axis.mul(1-cosAngle))))); //rotate local Z
+		
+//		return this.rotate(Quaternion.rotation(axis, angle));
+	}
+	
+	public Vector3f rotate(Quaternion rotation)
+	{
 		Quaternion conjugate = rotation.conjugate();
 		
 		Quaternion w = rotation.mul(this).mul(conjugate);
