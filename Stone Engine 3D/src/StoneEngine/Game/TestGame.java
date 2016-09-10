@@ -48,8 +48,9 @@ public class TestGame extends Game
 		MeshRenderer meshRenderer = new MeshRenderer(mesh, material);
 		MeshRenderer meshRenderer1 = new MeshRenderer(mesh, material);
 		MeshRenderer meshRenderer2 = new MeshRenderer(mesh, material);
+		MeshRenderer meshRenderer3 = new MeshRenderer(mesh, material);
 
-		DirectionalLight directionalLight1 = new DirectionalLight(new Vector3f(1.0f,0f,0f), 0.4f, new Vector3f(0.0f,1.0f,0.0f));
+		DirectionalLight directionalLight1 = new DirectionalLight(new Vector3f(1.0f,0f,0f), 0.4f);
 		PointLight pointLight1 = new PointLight(new Vector3f(0f, 0f, 1.0f), 1.0f, 0, 0, 0.5f);
 		SpotLight spotLight1 = new SpotLight(
 			new Vector3f(0,1,1), 0.4f,0,0,0.1f, 0.7f);
@@ -60,19 +61,20 @@ public class TestGame extends Game
 		planeObject.addComponent(meshRenderer);
 		planeObject.setTranslation(0, -1, 5);
 		
-		GameObject directionalLightTest = new GameObject();
-		directionalLightTest.setTranslation(2, 0, 0);
-		directionalLightTest.setRotation(Quaternion.rotation(new Vector3f(0,1,0), (float)Math.toRadians(-90)));
-		directionalLightTest.addComponent(directionalLight1);
-		directionalLightTest.addComponent(pointLight1);
-		directionalLightTest.addComponent(spotLight1);
+		GameObject directionalLightTest1 = new GameObject();
+		directionalLightTest1.setRotation(Quaternion.rotation(directionalLightTest1.getRotation().getRight(), (float)Math.toRadians(-45)));
+		directionalLightTest1.addComponent(directionalLight1);
 		
-		GameObject cameraObject = new GameObject();
-		cameraObject.addComponent(new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth()/(float)Window.getHeight(), 0.01f, 1000.0f));
+		GameObject directionalLightTest2 = new GameObject();
+		directionalLightTest2.setTranslation(2, 0, 0);
+		directionalLightTest2.setRotation(Quaternion.rotation(new Vector3f(0,1,0), (float)Math.toRadians(90)));
+		directionalLightTest2.addComponent(pointLight1);
+		directionalLightTest2.addComponent(spotLight1);
+		
 
 		getRootObject().addChild(planeObject);
-		getRootObject().addChild(cameraObject);
-		getRootObject().addChild(directionalLightTest);
+		getRootObject().addChild(directionalLightTest1);
+		getRootObject().addChild(directionalLightTest2);
 		
 		GameObject structureTest1 = new GameObject();
 		structureTest1.addComponent(meshRenderer1);
@@ -84,9 +86,19 @@ public class TestGame extends Game
 		structureTest2.addComponent(meshRenderer2);
 		structureTest2.setScale(1f, 1f, 1f);
 		structureTest2.setTranslation(0.0f, 0.0f, 50.0f);
+
+		GameObject structureTest3 = new GameObject();
+		structureTest3.addComponent(meshRenderer3);
+		structureTest3.setScale(1f, 1f, 1f);
+		structureTest3.setTranslation(-10.0f, -5.0f, -10.0f);
+		
+		GameObject cameraObject = new GameObject();
+		cameraObject.addComponent(new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth()/(float)Window.getHeight(), 0.01f, 1000.0f));
+		cameraObject.addChild(structureTest3);
 		
 		structureTest1.addChild(structureTest2);
+		structureTest2.addChild(cameraObject);
 		
-		getRootObject().addChild(structureTest1);
+		this.getRootObject().addChild(structureTest1);
 	}
 }

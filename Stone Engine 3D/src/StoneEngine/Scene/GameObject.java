@@ -32,16 +32,10 @@ public class GameObject extends Transform //extends Transform is an experimental
 		component.setParent(this);
 	}
 	
-	public void input(float delta)
-	{
-		for (GameComponent component : components)
-			component.input(delta);
-		
-		for (GameObject child : children)
-			child.input(delta);
-	}
 	public void update(float delta)
 	{
+		super.update();
+		
 		for (GameComponent component : components)
 			component.update(delta);
 		
@@ -49,7 +43,7 @@ public class GameObject extends Transform //extends Transform is an experimental
 			child.update(delta);
 	}
 	public void render(Shader shader)
-	{
+	{		
 		for (GameComponent component : components)
 			component.render(shader);
 		

@@ -46,6 +46,7 @@ public class CoreEngine
 		isRunning = true;
 		
 		int frames = 0;
+		int updates = 0;
 		double frameCounter = 0;
 		
 		game.init();
@@ -75,16 +76,21 @@ public class CoreEngine
 				
 //				Time.setDelta(frameTime);
 				
-				game.input(frameTime);
-				Input.update();
+//				game.input(frameTime);
 				
 				game.update(frameTime);
+				Input.update();
+				
+				updates++;
 				
 				if (frameCounter >= 1.0)//seconds
 				{
-					Debug.Log("FPS " + frames);
-					frames = 0;
 					frameCounter = 0;
+					Debug.Seperator();
+					Debug.Log("FPS " + frames);
+					Debug.Log("UPS " + updates);
+					frames = 0;
+					updates = 0;
 				}
 			}
 			

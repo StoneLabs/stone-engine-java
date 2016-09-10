@@ -4,6 +4,7 @@ import StoneEngine.Math.Matrix4f;
 import StoneEngine.Math.Quaternion;
 import StoneEngine.Math.Vector3f;
 import StoneEngine.Scene.Rendering.Camera;
+import StoneLabs.sutil.Debug;
 
 public class Transform 
 {
@@ -18,33 +19,52 @@ public class Transform
 	private Quaternion old_rotation;	//Change this method...
 	private Vector3f old_scale;
 
+	private boolean hasChanged = true;
 
 	public Transform()
 	{
 		translation = new Vector3f(0,0,0);
 		rotation	= new Quaternion(0,0,0,1);
 		scale		= new Vector3f(1,1,1);
+		
+		this.old_translation 	= new Vector3f(0,0,0);
+		this.old_rotation 		= new Quaternion(0,0,0,1);
+		this.old_scale 			= new Vector3f(1,1,1);
 
 		
 		parentMatrix = Matrix4f.identity();
 	}
 	
-	public boolean hasChanged()
+	protected void update()
 	{
-		if (old_translation == null)
-		{
-			old_translation = new Vector3f(0,0,0);
-			old_rotation	= new Quaternion(0,0,0,0);
-			old_scale		= new Vector3f(0,0,0);
-			return true;
-		}
+		hasChanged = false;
 		if (parent != null)
 		{
 			if (parent.hasChanged())
-				return true;
+				hasChanged = true;
 		}
-		return !(translation.equals(old_translation) && rotation.equals(old_rotation) && scale.equals(old_scale));
+		
+		if (!translation.equals(old_translation))
+			hasChanged = true;
+		if (!rotation.equals(old_rotation))
+			hasChanged = true;
+		if (!scale.equals(old_scale))
+			hasChanged = true;
+		
+		this.old_translation = this.translation;
+		this.old_rotation = this.rotation;
+		this.old_scale = this.scale;
+		
+		if (parent != null && parent.hasChanged())
+			parentMatrix = parent.getTransformation();
 	}
+	
+	public void rotate(Vector3f axis, float angle)
+	{
+		rotation = Quaternion.rotation(axis, angle).mul(rotation).normalize();
+	}
+
+	public boolean hasChanged() { return hasChanged; }
 	
 	public Matrix4f getTransformation() //is it really?
 	{
@@ -61,25 +81,29 @@ public class Transform
 				this.scale.getY(),  
 				this.scale.getZ())
 				;
-		
-		
-		if (this.old_translation != null)
-		{
-			this.old_translation = this.translation;
-			this.old_rotation = this.rotation;
-			this.old_scale = this.scale;
-		}
-		
-		return getParentMatrix().mul(translation.mul(rotation.mul(scale)));
+				
+		return parentMatrix.mul(translation.mul(rotation.mul(scale)));
 	}
 	
 	private Matrix4f getParentMatrix()
 	{
-		if (parent != null && parent.hasChanged())
-			parentMatrix = parent.getTransformation();
 		return parentMatrix;
 	}
 
+	public Vector3f getTransformedTranslation()
+	{
+		return getParentMatrix().transform(translation);
+	}
+	public Quaternion getTransformedRotation()
+	{
+		Quaternion parentRotation = new Quaternion(0,0,0,1);
+		
+		if (parent != null)
+			parentRotation = parent.getTransformedRotation();
+		
+		return parentRotation.mul(rotation);
+	}
+	
 	public Vector3f getTranslation() {
 		return translation;
 	}
@@ -95,9 +119,6 @@ public class Transform
 	public void setRotation(Quaternion rotation) {
 		this.rotation = rotation;
 	}
-//	public void setRotation(float x, float y, float z) {
-//		this.rotation = new Vector3f(x,y,z);
-//	}
 	public Vector3f getScale() {
 		return scale;
 	}
