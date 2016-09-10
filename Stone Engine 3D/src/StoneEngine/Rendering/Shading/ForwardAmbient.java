@@ -3,6 +3,7 @@ package StoneEngine.Rendering.Shading;
 import StoneEngine.Core.ResourceLoader;
 import StoneEngine.Math.Matrix4f;
 import StoneEngine.Rendering.Material;
+import StoneEngine.Rendering.RenderingEngine;
 import StoneEngine.Scene.Transform;
 
 public class ForwardAmbient extends Shader
@@ -30,14 +31,14 @@ public class ForwardAmbient extends Shader
 		addUniform("ambientIntensity");
 	}
 	
-	public void updateUniforms(Transform transform, Material material)
+	public void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine)
 	{
 		Matrix4f worldMatrix = transform.getTransformation();
-		Matrix4f projectedMatrix = getRenderingEngine().getMainCamera().getViewProjection().mul(worldMatrix);
+		Matrix4f projectedMatrix = renderingEngine.getMainCamera().getViewProjection().mul(worldMatrix);
 		
-		material.getTexture().bind();
+		material.getTexture("diffuse").bind();
 		
 		setUniform("MVP", projectedMatrix);
-		setUniform("ambientIntensity", getRenderingEngine().getAmbientLight());
+		setUniform("ambientIntensity", renderingEngine.getAmbientLight());
 	}
 }

@@ -26,6 +26,9 @@ import StoneLabs.sutil.Debug;
 @SuppressWarnings("unused") //TODO REMOVE
 public class TestGame extends Game
 {
+	GameObject structureTest1 = new GameObject();
+	GameObject directionalLightTest2 = new GameObject();
+	
 	@Override
 	public void init()
 	{
@@ -43,7 +46,10 @@ public class TestGame extends Game
 				2, 1, 3};
 
 		Mesh mesh = new Mesh(vertices, indices, true);
-		Material material = new Material(ResourceLoader.loadTexture("test.png"), new Vector3f(1,1,1), 1, 8);
+		Material material = new Material();
+		material.addTexture("diffuse", ResourceLoader.loadTexture("test.png"));
+		material.addFloat("specularIntensity", 1f);
+		material.addFloat("specularExponent", 8f);
 
 		MeshRenderer meshRenderer = new MeshRenderer(mesh, material);
 		MeshRenderer meshRenderer1 = new MeshRenderer(mesh, material);
@@ -65,7 +71,6 @@ public class TestGame extends Game
 		directionalLightTest1.setRotation(Quaternion.rotation(directionalLightTest1.getRotation().getRight(), (float)Math.toRadians(-45)));
 		directionalLightTest1.addComponent(directionalLight1);
 		
-		GameObject directionalLightTest2 = new GameObject();
 		directionalLightTest2.setTranslation(2, 0, 0);
 		directionalLightTest2.setRotation(Quaternion.rotation(new Vector3f(0,1,0), (float)Math.toRadians(90)));
 		directionalLightTest2.addComponent(pointLight1);
@@ -76,7 +81,6 @@ public class TestGame extends Game
 		getRootObject().addChild(directionalLightTest1);
 		getRootObject().addChild(directionalLightTest2);
 		
-		GameObject structureTest1 = new GameObject();
 		structureTest1.addComponent(meshRenderer1);
 		structureTest1.setScale(0.1f, 0.1f, 0.1f);
 		structureTest1.setRotation(Quaternion.rotation(Vector3f.YAXIS(), 0.785f));
@@ -89,16 +93,25 @@ public class TestGame extends Game
 
 		GameObject structureTest3 = new GameObject();
 		structureTest3.addComponent(meshRenderer3);
-		structureTest3.setScale(1f, 1f, 1f);
-		structureTest3.setTranslation(-10.0f, -5.0f, -10.0f);
+		structureTest3.setScale(0.1f, 1f, 0.1f);
+		structureTest3.setTranslation(-1.0f, -1f, -1.0f);
 		
 		GameObject cameraObject = new GameObject();
 		cameraObject.addComponent(new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth()/(float)Window.getHeight(), 0.01f, 1000.0f));
 		cameraObject.addChild(structureTest3);
 		
 		structureTest1.addChild(structureTest2);
-		structureTest2.addChild(cameraObject);
 		
+		this.getRootObject().addChild(cameraObject);
 		this.getRootObject().addChild(structureTest1);
+	}
+	
+	@Override
+	public void update(float deltaTime)
+	{
+		super.update(deltaTime);
+
+		directionalLightTest2.rotate(Vector3f.YAXIS(), -deltaTime);
+		structureTest1.rotate(Vector3f.YAXIS(), deltaTime);
 	}
 }

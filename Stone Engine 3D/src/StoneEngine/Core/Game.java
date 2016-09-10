@@ -10,9 +10,9 @@ public abstract class Game
 	
 	public void update(float delta)
 	{
-		getRootObject().update(delta);
+		root.update(delta);
 	}
 	
-	public GameObject getRootObject()
+	public GameObject getRootObject() //todo: make root object private
 	{ if (root == null) root = new GameObject(); return root; }
 }

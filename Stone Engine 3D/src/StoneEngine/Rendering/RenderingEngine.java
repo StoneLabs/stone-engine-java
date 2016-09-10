@@ -79,10 +79,9 @@ public class RenderingEngine
 		object.addToRenderingEngine(this); //Temp...
 
 		Shader forwardAmbient = ForwardAmbient.getInstance();
-		forwardAmbient.setRenderingEngine(this);
 		
 		{ //Actual render pipeline
-			object.render(forwardAmbient); //Initial render cycle
+			object.render(forwardAmbient, this); //Initial render cycle
 			
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_ONE, GL_ONE);
@@ -92,11 +91,9 @@ public class RenderingEngine
 			//BLENDING ZONE
 			for (BaseLight light : lights)
 			{
-				light.getShader().setRenderingEngine(this);
-
 				activeLight = light;
 
-				object.render(light.getShader()); //Blending cycle
+				object.render(light.getShader(), this); //Blending cycle
 			}
 			//BLENDING ZONE
 

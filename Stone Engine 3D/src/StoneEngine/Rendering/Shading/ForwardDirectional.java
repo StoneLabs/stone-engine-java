@@ -3,6 +3,7 @@ package StoneEngine.Rendering.Shading;
 import StoneEngine.Core.ResourceLoader;
 import StoneEngine.Math.Matrix4f;
 import StoneEngine.Rendering.Material;
+import StoneEngine.Rendering.RenderingEngine;
 import StoneEngine.Scene.Transform;
 import StoneEngine.Scene.Lighting.BaseLight;
 import StoneEngine.Scene.Lighting.DirectionalLight;
@@ -41,21 +42,21 @@ public class ForwardDirectional extends Shader
 		addUniform("directionalLight.direction");
 	}
 	
-	public void updateUniforms(Transform transform, Material material)
+	public void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine)
 	{
 		Matrix4f worldMatrix = transform.getTransformation();
-		Matrix4f projectedMatrix = getRenderingEngine().getMainCamera().getViewProjection().mul(worldMatrix);
+		Matrix4f projectedMatrix = renderingEngine.getMainCamera().getViewProjection().mul(worldMatrix);
 		
-		material.getTexture().bind();
+		material.getTexture("diffuse").bind();
 				
 		setUniform("model", worldMatrix); //transform
 		setUniform("MVP", projectedMatrix); //Model view perspective
 		
-		setUniformf("specularIntensity", material.getSpecularIntensity());
-		setUniformf("specularExponent", material.getSpecularExponent());
+		setUniformf("specularIntensity", material.getFloat("specularIntensity"));
+		setUniformf("specularExponent", material.getFloat("specularExponent"));
 		
-		setUniform("eyePos", getRenderingEngine().getMainCamera().getGameObject().getTransformedTranslation());
-		setUniformDirectionalLight("directionalLight", (DirectionalLight)getRenderingEngine().getActiveLight());
+		setUniform("eyePos", renderingEngine.getMainCamera().getGameObject().getTransformedTranslation());
+		setUniformDirectionalLight("directionalLight", (DirectionalLight)renderingEngine.getActiveLight());
 	}
 	
 	public void setUniformBaseLight(String uniformName, BaseLight baseLight)
