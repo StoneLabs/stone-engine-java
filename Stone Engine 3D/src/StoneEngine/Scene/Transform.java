@@ -6,10 +6,17 @@ import StoneEngine.Math.Vector3f;
 import StoneEngine.Scene.Rendering.Camera;
 
 public class Transform 
-{	
+{
+	private Transform parent = null;
+	private Matrix4f parentMatrix;
+	
 	private Vector3f translation;
 	private Quaternion rotation;
 	private Vector3f scale;
+	
+	private Vector3f old_translation;
+	private Quaternion old_rotation;	//Change this method...
+	private Vector3f old_scale;
 
 
 	public Transform()
@@ -17,9 +24,29 @@ public class Transform
 		translation = new Vector3f(0,0,0);
 		rotation	= new Quaternion(0,0,0,1);
 		scale		= new Vector3f(1,1,1);
+
+		
+		parentMatrix = Matrix4f.identity();
 	}
 	
-	public Matrix4f getTanformation() //is it really?
+	public boolean hasChanged()
+	{
+		if (old_translation == null)
+		{
+			old_translation = new Vector3f(0,0,0);
+			old_rotation	= new Quaternion(0,0,0,0);
+			old_scale		= new Vector3f(0,0,0);
+			return true;
+		}
+		if (parent != null)
+		{
+			if (parent.hasChanged())
+				return true;
+		}
+		return !(translation.equals(old_translation) && rotation.equals(old_rotation) && scale.equals(old_scale));
+	}
+	
+	public Matrix4f getTransformation() //is it really?
 	{
 		Matrix4f translation = Matrix4f.translation(
 				this.translation.getX(), 
@@ -35,7 +62,22 @@ public class Transform
 				this.scale.getZ())
 				;
 		
-		return translation.mul(rotation.mul(scale));
+		
+		if (this.old_translation != null)
+		{
+			this.old_translation = this.translation;
+			this.old_rotation = this.rotation;
+			this.old_scale = this.scale;
+		}
+		
+		return getParentMatrix().mul(translation.mul(rotation.mul(scale)));
+	}
+	
+	private Matrix4f getParentMatrix()
+	{
+		if (parent != null && parent.hasChanged())
+			parentMatrix = parent.getTransformation();
+		return parentMatrix;
 	}
 
 	public Vector3f getTranslation() {
@@ -64,5 +106,13 @@ public class Transform
 	}
 	public void setScale(float x, float y, float z) {
 		this.scale.set(x,y,z);
+	}
+
+	protected Transform getParent() {
+		return parent;
+	}
+
+	protected void setParent(Transform parent) {
+		this.parent = parent;
 	}
 }

@@ -45,7 +45,6 @@ public class Camera extends GameComponent
 		Vector2f centerPosition = new Vector2f(Window.getWidth()/2, Window.getHeight()/2);
 		
 		float moveAmnt = (float)(10 * delta);
-		float rotAmnt = (float)(100 * delta);
 		
 		if (Input.getKey(Input.Keys.KEY_W))
 			this.getGameObject().move(this.getGameObject().getRotation().getForward(), moveAmnt);

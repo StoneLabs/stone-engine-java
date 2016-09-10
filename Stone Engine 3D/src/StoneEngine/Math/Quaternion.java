@@ -133,4 +133,12 @@ public class Quaternion
 	public void setW(float w) {
 		this.w = w;
 	}
+	
+	public boolean equals(Quaternion r)
+	{
+		return  x == r.x &&
+				y == r.y &&
+				z == r.z &&
+				w == r.w;
+	}
 }

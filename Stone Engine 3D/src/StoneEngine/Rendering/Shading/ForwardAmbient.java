@@ -32,7 +32,7 @@ public class ForwardAmbient extends Shader
 	
 	public void updateUniforms(Transform transform, Material material)
 	{
-		Matrix4f worldMatrix = transform.getTanformation();
+		Matrix4f worldMatrix = transform.getTransformation();
 		Matrix4f projectedMatrix = getRenderingEngine().getMainCamera().getViewProjection().mul(worldMatrix);
 		
 		material.getTexture().bind();
