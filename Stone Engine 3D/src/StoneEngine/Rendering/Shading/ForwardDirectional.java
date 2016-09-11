@@ -1,6 +1,6 @@
 package StoneEngine.Rendering.Shading;
 
-import StoneEngine.Core.ResourceLoader.ResourceLoader;
+import StoneEngine.ResourceLoader.ResourceLoader;
 import StoneEngine.Math.Matrix4f;
 import StoneEngine.Rendering.Material;
 import StoneEngine.Rendering.RenderingEngine;

@@ -1,4 +1,4 @@
-package StoneEngine.Core.ResourceLoader.Models.OBJ;
+package StoneEngine.ResourceLoader.Models.OBJ;
 
 public class OBJIndex
 {

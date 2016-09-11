@@ -1,4 +1,4 @@
-package StoneEngine.Core.ResourceLoader.Models.OBJ;
+package StoneEngine.ResourceLoader.Models.OBJ;
 
 import java.io.BufferedReader;
 import java.io.Reader;
@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import StoneEngine.Core.Util;
-import StoneEngine.Core.ResourceLoader.Models.IndexedModel;
-import StoneEngine.Core.ResourceLoader.Models.ResourceModel;
+import StoneEngine.ResourceLoader.Models.IndexedModel;
+import StoneEngine.ResourceLoader.Models.ResourceModel;
 import StoneEngine.Math.Vector2f;
 import StoneEngine.Math.Vector3f;
 import StoneLabs.sutil.Debug;

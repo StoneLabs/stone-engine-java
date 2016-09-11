@@ -1,4 +1,4 @@
-package StoneEngine.Core.ResourceLoader.Models;
+package StoneEngine.ResourceLoader.Models;
 
 import java.util.ArrayList;
 
