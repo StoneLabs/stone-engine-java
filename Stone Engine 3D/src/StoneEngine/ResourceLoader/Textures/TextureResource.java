@@ -1,24 +1,19 @@
-package StoneEngine.ResourceLoader.Models;
+package StoneEngine.ResourceLoader.Textures;
 
 import static org.lwjgl.opengl.GL15.glDeleteBuffers;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
 
 import StoneEngine.ResourceLoader.ResourceLoader;
 
-public class MeshResource 
+public class TextureResource
 {
-	private int vbo; //VERTEX pointer
-	private int ibo; //INDEX  pointer
-	private int size;
+	private int id; //texture pointer
 	private int referenceCounter; //For finalization
 	private String fileReference = null;
 	
-	public MeshResource() 
+	public TextureResource(int id)
 	{
-		this.vbo = glGenBuffers();
-		this.ibo = glGenBuffers();
+		this.id = id;
 		this.referenceCounter = 1;
-		this.size = 0;
 	}
 
 	public void addReference()
@@ -34,29 +29,16 @@ public class MeshResource
 	@Override
 	protected void finalize()
 	{
-		glDeleteBuffers(vbo);
-		glDeleteBuffers(ibo);
+		glDeleteBuffers(this.id);
 		if (fileReference != null)
 		{
-			ResourceLoader.getKnownModels().remove(fileReference);
+			ResourceLoader.getKnownTextures().remove(fileReference);
 			fileReference = null;
 		}
 	}
 
-	public int getVbo() {
-		return vbo;
-	}
-
-	public int getIbo() {
-		return ibo;
-	}
-
-	public int getSize() {
-		return size;
-	}
-
-	protected void setSize(int size) {
-		this.size = size;
+	public int getId() {
+		return id;
 	}
 
 	public void setFileReference(String fileReference) {

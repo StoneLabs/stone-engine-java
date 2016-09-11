@@ -3,6 +3,7 @@ package StoneEngine.Rendering;
 import java.util.HashMap;
 
 import StoneEngine.Math.Vector3f;
+import StoneEngine.ResourceLoader.Textures.Texture;
 
 public class Material
 {

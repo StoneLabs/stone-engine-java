@@ -36,7 +36,6 @@ public class Mesh
 	public void finalize()
 	{
 		resource.removeReference();
-		resource = new MeshResource();
 	}
 
 	public void addVertices(Vertex[] vertices, int[] indices)
