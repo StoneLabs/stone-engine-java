@@ -1,9 +1,9 @@
 package StoneEngine.Scene.Rendering;
 
 import StoneEngine.Rendering.Material;
-import StoneEngine.Rendering.Mesh;
 import StoneEngine.Rendering.RenderingEngine;
 import StoneEngine.Rendering.Shading.Shader;
+import StoneEngine.ResourceLoader.Models.Mesh;
 import StoneEngine.Scene.GameComponent;
 
 public class MeshRenderer extends GameComponent

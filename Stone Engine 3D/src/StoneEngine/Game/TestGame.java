@@ -4,6 +4,7 @@ import StoneEngine.Core.Input;
 import StoneEngine.Core.CoreEngine;
 import StoneEngine.Core.Game;
 import StoneEngine.ResourceLoader.ResourceLoader;
+import StoneEngine.ResourceLoader.Models.Mesh;
 import StoneEngine.ResourceLoader.Models.OBJ.OBJModel;
 import StoneEngine.Core.Time;
 import StoneEngine.Math.Quaternion;
@@ -11,7 +12,6 @@ import StoneEngine.Math.Vector2f;
 import StoneEngine.Math.Vector3f;
 import StoneEngine.Math.Vertex;
 import StoneEngine.Rendering.Material;
-import StoneEngine.Rendering.Mesh;
 import StoneEngine.Rendering.Window;
 import StoneEngine.Rendering.Shading.Shader;
 import StoneEngine.Scene.GameObject;
@@ -30,6 +30,7 @@ public class TestGame extends Game
 	GameObject structureTest1 = new GameObject();
 	GameObject directionalLightTest2 = new GameObject();
 	GameObject monkey = new GameObject();
+	GameObject monkey2 = new GameObject();
 	
 	@Override
 	public void init()
@@ -50,8 +51,8 @@ public class TestGame extends Game
 		Mesh mesh = new Mesh(vertices, indices, true);
 		Material material = new Material();
 		material.addTexture("diffuse", ResourceLoader.loadTexture("test.png"));
-		material.addFloat("specularIntensity", 1f);
-		material.addFloat("specularExponent", 8f);
+		material.addFloat("specularIntensity", 0.5f);
+		material.addFloat("specularExponent", 32f);
 
 		MeshRenderer meshRenderer = new MeshRenderer(mesh, material);
 		MeshRenderer meshRenderer1 = new MeshRenderer(mesh, material);
@@ -59,6 +60,7 @@ public class TestGame extends Game
 		MeshRenderer meshRenderer3 = new MeshRenderer(mesh, material);
 		
 		MeshRenderer meshRendererMonkey = new MeshRenderer(ResourceLoader.loadMesh("monkey.obj", OBJModel.class), material);
+		MeshRenderer meshRendererMonkey2 = new MeshRenderer(ResourceLoader.loadMesh("monkey.obj", OBJModel.class), material);
 
 		DirectionalLight directionalLight1 = new DirectionalLight(new Vector3f(1.0f,0f,0f), 0.4f);
 		PointLight pointLight1 = new PointLight(new Vector3f(0f, 0f, 1.0f), 1.0f, 0, 0, 0.5f);
@@ -113,7 +115,12 @@ public class TestGame extends Game
 		monkey.setScale(2f, 2f, 2f);
 		monkey.setTranslation(10, 5, 10);
 		
-		this.getRootObject().addChild(monkey);	
+		monkey2.addComponent(meshRendererMonkey2);
+		monkey2.setScale(2f, 2f, 2f);
+		monkey2.setTranslation(15, 5, 15);
+		
+		this.getRootObject().addChild(monkey);
+		this.getRootObject().addChild(monkey2);	
 	}
 	
 	@Override
