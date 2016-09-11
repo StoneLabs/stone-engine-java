@@ -3,7 +3,8 @@ package StoneEngine.Game;
 import StoneEngine.Core.Input;
 import StoneEngine.Core.CoreEngine;
 import StoneEngine.Core.Game;
-import StoneEngine.Core.ResourceLoader;
+import StoneEngine.Core.ResourceLoader.ResourceLoader;
+import StoneEngine.Core.ResourceLoader.Models.OBJ.OBJModel;
 import StoneEngine.Core.Time;
 import StoneEngine.Math.Quaternion;
 import StoneEngine.Math.Vector2f;
@@ -28,6 +29,7 @@ public class TestGame extends Game
 {
 	GameObject structureTest1 = new GameObject();
 	GameObject directionalLightTest2 = new GameObject();
+	GameObject monkey = new GameObject();
 	
 	@Override
 	public void init()
@@ -55,6 +57,8 @@ public class TestGame extends Game
 		MeshRenderer meshRenderer1 = new MeshRenderer(mesh, material);
 		MeshRenderer meshRenderer2 = new MeshRenderer(mesh, material);
 		MeshRenderer meshRenderer3 = new MeshRenderer(mesh, material);
+		
+		MeshRenderer meshRendererMonkey = new MeshRenderer(ResourceLoader.loadMesh("monkey.obj", OBJModel.class), material);
 
 		DirectionalLight directionalLight1 = new DirectionalLight(new Vector3f(1.0f,0f,0f), 0.4f);
 		PointLight pointLight1 = new PointLight(new Vector3f(0f, 0f, 1.0f), 1.0f, 0, 0, 0.5f);
@@ -104,6 +108,12 @@ public class TestGame extends Game
 		
 		this.getRootObject().addChild(cameraObject);
 		this.getRootObject().addChild(structureTest1);
+		
+		monkey.addComponent(meshRendererMonkey);
+		monkey.setScale(2f, 2f, 2f);
+		monkey.setTranslation(10, 5, 10);
+		
+		this.getRootObject().addChild(monkey);	
 	}
 	
 	@Override
@@ -113,5 +123,6 @@ public class TestGame extends Game
 
 		directionalLightTest2.rotate(Vector3f.YAXIS(), -deltaTime);
 		structureTest1.rotate(Vector3f.YAXIS(), deltaTime);
+		monkey.rotate(Vector3f.YAXIS(), deltaTime/2);
 	}
 }
