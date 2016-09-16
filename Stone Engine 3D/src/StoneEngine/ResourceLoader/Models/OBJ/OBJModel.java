@@ -24,10 +24,10 @@ public class OBJModel implements ResourceModel
 	public OBJModel() {}
 	
 	@Override
-	public String DefaultExtension() { return "obj"; }
+	public String defaultExtension() { return "obj"; }
 	
 	@Override
-	public void Load(Reader source)
+	public void load(Reader source)
 	{
 		this.positions	= new ArrayList<Vector3f>();
 		this.texCoords	= new ArrayList<Vector2f>();
@@ -103,7 +103,7 @@ public class OBJModel implements ResourceModel
 	}
 	
 	@Override
-	public IndexedModel ToIndexedModel()
+	public IndexedModel toIndexedModel()
 	{
 		IndexedModel result = new IndexedModel();
 		IndexedModel normalModel = new IndexedModel();

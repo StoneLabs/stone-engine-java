@@ -19,8 +19,8 @@ public class ForwardAmbient extends Shader
 	{
 		super();
 				
-		addVertexShader(ResourceLoader.loadShader("forward-ambient.vs"));
-		addFragmentShader(ResourceLoader.loadShader("forward-ambient.fs"));
+		addVertexShader(ResourceLoader.loadShader("shaders\\forward-ambient.vs"));
+		addFragmentShader(ResourceLoader.loadShader("shaders\\forward-ambient.fs"));
 		
 		setAttribLocation("position", 0);
 		setAttribLocation("texCoord", 1);

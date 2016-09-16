@@ -21,8 +21,8 @@ public class ForwardDirectional extends Shader
 	{
 		super();
 				
-		addVertexShader(ResourceLoader.loadShader("forward-directional.vs"));
-		addFragmentShader(ResourceLoader.loadShader("forward-directional.fs"));
+		addVertexShader(ResourceLoader.loadShader("shaders\\forward-directional.vs"));
+		addFragmentShader(ResourceLoader.loadShader("shaders\\forward-directional.fs"));
 		
 		setAttribLocation("position", 0);
 		setAttribLocation("texCoord", 1);

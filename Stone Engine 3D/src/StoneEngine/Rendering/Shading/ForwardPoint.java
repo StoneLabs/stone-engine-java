@@ -21,8 +21,8 @@ public class ForwardPoint extends Shader
 	{
 		super();
 				
-		addVertexShader(ResourceLoader.loadShader("forward-point.vs"));
-		addFragmentShader(ResourceLoader.loadShader("forward-point.fs"));
+		addVertexShader(ResourceLoader.loadShader("shaders\\forward-point.vs"));
+		addFragmentShader(ResourceLoader.loadShader("shaders\\forward-point.fs"));
 		
 		setAttribLocation("position", 0);
 		setAttribLocation("texCoord", 1);

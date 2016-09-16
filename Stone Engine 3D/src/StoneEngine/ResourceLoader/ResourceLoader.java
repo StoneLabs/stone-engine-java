@@ -44,12 +44,7 @@ public class ResourceLoader
 		
 		if (loadedTextures.containsKey(fileName))
 			return new Texture(loadedTextures.get(fileName));
-		
-		Debug.Log("Loading file...");
-		
-//		String[] splitArray = fileName.split("\\.");
-//		String ext = splitArray[splitArray.length - 1];
-		
+						
 		try
 		{
 			BufferedImage image = ImageIO.read(new File("./res/" + fileName));
@@ -112,12 +107,22 @@ public class ResourceLoader
 		
 		BufferedReader shaderReader = null;
 		
+		final String INCLIDE_DIRECTIVE = "#include";
+				
 		try
 		{
 			shaderReader = new BufferedReader(new FileReader("./res/" + fileName));
 			String line;
 			while ((line = shaderReader.readLine()) != null)
-				shaderSource.append(line).append("\n");
+			{
+				if  (line.startsWith(INCLIDE_DIRECTIVE))
+				{
+					String subFile = line.substring(INCLIDE_DIRECTIVE.length() + 2, line.length() - 1);
+					shaderSource.append(loadShader(subFile)).append("\n");
+				}
+				else
+					shaderSource.append(line).append("\n");
+			}
 		}
 		catch (Exception e) { e.printStackTrace(); }
 				
@@ -140,14 +145,14 @@ public class ResourceLoader
 		{ 
 			model = analyser.newInstance(); 
 			
-			String defaultExtension = model.DefaultExtension();
+			String defaultExtension = model.defaultExtension();
 			
 			if (!ext.equals(defaultExtension))
 				Debug.Warning("Trying to load ." + defaultExtension + " file from ." + ext + " file!");
 			
-			model.Load(new FileReader("./res/" + fileName));
+			model.load(new FileReader("./res/" + fileName));
 			
-			IndexedModel indexedModel = model.ToIndexedModel();
+			IndexedModel indexedModel = model.toIndexedModel();
 			Mesh result = indexedModel.ToMesh();
 			
 			result.getBuffers().setFileReference(fileName);

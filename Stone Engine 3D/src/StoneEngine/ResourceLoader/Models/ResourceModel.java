@@ -4,7 +4,7 @@ import java.io.Reader;
 
 public interface ResourceModel 
 {
-	public void Load(Reader file);
-	public IndexedModel ToIndexedModel();
-	public String DefaultExtension();
+	public void load(Reader file);
+	public IndexedModel toIndexedModel();
+	public String defaultExtension();
 }
