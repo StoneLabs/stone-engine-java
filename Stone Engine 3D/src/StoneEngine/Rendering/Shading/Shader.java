@@ -3,6 +3,7 @@ package StoneEngine.Rendering.Shading;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL32.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import StoneEngine.Core.Util;
@@ -10,11 +11,35 @@ import StoneEngine.Math.Matrix4f;
 import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.Material;
 import StoneEngine.Rendering.RenderingEngine;
+import StoneEngine.ResourceLoader.ResourceLoader;
 import StoneEngine.Scene.Transform;
 import StoneLabs.sutil.Debug;
 
+//TODO: reformat file
 public class Shader
 {
+	private class GLSLVariableContainer
+	{
+		String type;
+		String name;
+		
+		public GLSLVariableContainer(String name,String type)
+		{
+			this.type = type;
+			this.name = name;
+		}
+
+		@SuppressWarnings("unused")
+		public String getType() {
+			return type;
+		}
+
+		@SuppressWarnings("unused")
+		public String getName() {
+			return name;
+		}
+	}
+	
 	private int program;
 	
 	private HashMap<String, Integer> uniforms;
@@ -24,8 +49,34 @@ public class Shader
 		program = glCreateProgram();
 		uniforms = new HashMap<String, Integer>();
 		
-		if (program == 0)
-			Debug.Error("Shader Creation Failed: Could not find valid memory location in constrictor!");
+		if (program == 0x0)
+			Debug.Error("Shader Creation Failed: Could not find valid memory location in constructor!");
+	}
+	public Shader(String vertexShader)
+	{
+		this(vertexShader, null, null);
+	}
+	public Shader(String vertexShader, String fragmentShader)
+	{
+		this(vertexShader, fragmentShader, null);
+	}
+	public Shader(String vertexShader, String fragmentShader, String geometryShader)
+	{
+		this();
+		
+		if (vertexShader != null) addVertexShader(vertexShader);
+		if (fragmentShader != null) addFragmentShader(fragmentShader);
+		if (geometryShader != null) addGeometryShader(geometryShader);
+
+		if (vertexShader != null) addAllAttrubutes(vertexShader);
+		if (fragmentShader != null) addAllAttrubutes(fragmentShader);
+		if (geometryShader != null) addAllAttrubutes(geometryShader);
+		
+		compileShader();
+		
+		if (vertexShader != null) addAllUniforms(vertexShader);
+		if (fragmentShader != null) addAllUniforms(fragmentShader);
+		if (geometryShader != null) addAllUniforms(geometryShader);
 	}
 	
 	public void bind()
@@ -37,12 +88,134 @@ public class Shader
 	{
 		
 	}
+
+	//TODO: Rewrite parser
+	public void addAllAttrubutes(String shaderText)
+	{
+		final String ATTRIBUTE_KEYWORD = "attribute";
+		int unformStartLocation = shaderText.indexOf(ATTRIBUTE_KEYWORD);
 		
+		int attribNumber = 0;
+		
+		while (unformStartLocation != -1)
+		{
+			int start 	= unformStartLocation + ATTRIBUTE_KEYWORD.length() + 1;
+			int end 	= shaderText.indexOf(";", start);
+			
+			String attrubLine = shaderText.substring(start, end);
+			String[] parts = attrubLine.split(" ");
+			
+			if (parts.length == 2)
+			{
+//				String type = parts[0];
+				String name = parts[1];
+				setAttribLocation(name, attribNumber++);
+			}
+			
+			unformStartLocation = shaderText.indexOf(ATTRIBUTE_KEYWORD, end);
+		}
+	}
+	
+	//TODO: Rewrite parser
+	private HashMap<String, ArrayList<GLSLVariableContainer>> findUniformStructs(String shaderText)
+	{
+		HashMap<String, ArrayList<GLSLVariableContainer>> result = new HashMap<String, ArrayList<GLSLVariableContainer>>();
+		
+		final String STRUCT_KEYWORD = "struct";
+		int structStartLocation = shaderText.indexOf(STRUCT_KEYWORD);
+		
+		while (structStartLocation != -1)
+		{
+			int nameStart 	= structStartLocation + STRUCT_KEYWORD.length() + 1;
+			int braceStart 	= shaderText.indexOf("{", nameStart);
+			int end		 	= shaderText.indexOf("}", braceStart);
+			
+			String structName = shaderText.substring(nameStart, braceStart).replaceAll("\\s", "");
+			ArrayList<GLSLVariableContainer> structComponents = new ArrayList<GLSLVariableContainer>();
+			
+			int componentSimicolonPos = shaderText.indexOf(";", nameStart);
+			while (componentSimicolonPos != -1 && componentSimicolonPos < end)
+			{
+				int componentNameStart = componentSimicolonPos;
+				
+				while (!Character.isWhitespace(shaderText.charAt(componentNameStart - 1)))
+					componentNameStart--;
+				
+				int componentTypeEnd = componentNameStart - 1;
+				int componentTypeStart = componentTypeEnd;
+				
+				while (!Character.isWhitespace(shaderText.charAt(componentTypeStart - 1)))
+					componentTypeStart--;
+				
+				String componentName = shaderText.substring(componentNameStart, componentSimicolonPos);
+				String componentType = shaderText.substring(componentTypeStart, componentTypeEnd);
+				
+				structComponents.add(new GLSLVariableContainer(componentName, componentType));
+				
+				componentSimicolonPos = shaderText.indexOf(";", componentSimicolonPos + 1);
+			}
+			
+			result.put(structName, structComponents);
+			
+			structStartLocation = shaderText.indexOf(STRUCT_KEYWORD, end);
+		}
+		
+		return result;
+	}
+
+	//TODO: Rewrite parser
+	public void addAllUniforms(String shaderText)
+	{
+		HashMap<String, ArrayList<GLSLVariableContainer>> structs = findUniformStructs(shaderText);
+		
+//		GLSL Structs Debug:
+//		for (String s : structs.keySet()) {	Debug.Log(s); for (GLSLVariableContainer member : structs.get(s)) Debug.Log(" -> " + member.getName() + " : " + member.getType()); }
+		
+		final String UNIFORM_KEYWORD = "uniform";
+		int unformStartLocation = shaderText.indexOf(UNIFORM_KEYWORD);
+		
+		while (unformStartLocation != -1)
+		{
+			int start 	= unformStartLocation + UNIFORM_KEYWORD.length() + 1;
+			int end 	= shaderText.indexOf(";", start);
+			
+			String uniformLine = shaderText.substring(start, end);
+			String[] parts = uniformLine.split(" ");
+			
+			if (parts.length == 2)
+			{
+				String type = parts[0];
+				String name = parts[1];
+				addUniformWhithStructCheck(new GLSLVariableContainer(name, type), structs);
+			}
+			
+			unformStartLocation = shaderText.indexOf(UNIFORM_KEYWORD, end);
+		}
+	}
+	
+	private void addUniformWhithStructCheck(GLSLVariableContainer uniform, HashMap<String, ArrayList<GLSLVariableContainer>> structs)
+	{
+		if (!structs.keySet().contains(uniform.getType()))
+		{
+			addUniform(uniform.getName());
+			return;
+		}
+		
+		for (GLSLVariableContainer member : structs.get(uniform.getType()))
+		{
+			GLSLVariableContainer subUniformForMember = new GLSLVariableContainer(
+					uniform.getName() + "." + member.getName(),
+					member.getType());
+			
+			addUniformWhithStructCheck(subUniformForMember, structs);
+		}
+	}
+	
 	public void addUniform(String uniform)
 	{
 		int uniformLocation = glGetUniformLocation(program, uniform);
 		
-		if (uniformLocation == 0xFFFFFF)
+		if(uniformLocation == 0xFFFFFFFF)
 			Debug.Error("Error: Could not find uniform: " + uniform);
 		
 		uniforms.put(uniform, uniformLocation);

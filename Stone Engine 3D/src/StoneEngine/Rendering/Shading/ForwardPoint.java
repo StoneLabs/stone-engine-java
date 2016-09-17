@@ -19,31 +19,7 @@ public class ForwardPoint extends Shader
 	
 	private ForwardPoint()
 	{
-		super();
-				
-		addVertexShader(ResourceLoader.loadShader("shaders\\forward-point.vs"));
-		addFragmentShader(ResourceLoader.loadShader("shaders\\forward-point.fs"));
-		
-		setAttribLocation("position", 0);
-		setAttribLocation("texCoord", 1);
-		setAttribLocation("normal"	, 2);
-		
-		compileShader();
-				
-		addUniform("model");
-		addUniform("MVP");
-		
-		addUniform("specularIntensity");
-		addUniform("specularExponent");
-		addUniform("eyePos");
-
-		addUniform("pointLight.base.color");
-		addUniform("pointLight.base.intensity");
-		addUniform("pointLight.atten.constant");
-		addUniform("pointLight.atten.linear");
-		addUniform("pointLight.atten.exponent");
-		addUniform("pointLight.position");
-		addUniform("pointLight.range");
+		super(ResourceLoader.loadShader("shaders\\forward-point.vs"), ResourceLoader.loadShader("shaders\\forward-point.fs"));
 	}
 	
 	public void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine)
