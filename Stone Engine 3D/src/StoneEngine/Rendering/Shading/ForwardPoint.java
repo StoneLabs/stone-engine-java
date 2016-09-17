@@ -21,38 +21,4 @@ public class ForwardPoint extends Shader
 	{
 		super(ResourceLoader.loadShader("shaders\\forward-point.vs"), ResourceLoader.loadShader("shaders\\forward-point.fs"));
 	}
-	
-	public void updateUniforms(Transform transform, Material material, RenderingEngine renderingEngine)
-	{
-		Matrix4f worldMatrix = transform.getTransformation();
-		Matrix4f projectedMatrix = renderingEngine.getMainCamera().getViewProjection().mul(worldMatrix);
-		
-		material.getTexture("diffuse").bind();
-				
-		setUniform("model", worldMatrix); //transform
-		setUniform("MVP", projectedMatrix); //Model view perspective
-
-		setUniformf("specularIntensity", material.getFloat("specularIntensity"));
-		setUniformf("specularExponent", material.getFloat("specularExponent"));
-		
-		setUniform("eyePos", renderingEngine.getMainCamera().getGameObject().getTransformedTranslation());
-		
-		setUniformPointLight("pointLight", (PointLight)renderingEngine.getActiveLight());
-	}
-	
-	public void setUniformBaseLight(String uniformName, BaseLight baseLight)
-	{
-		setUniform(uniformName + ".color", baseLight.getColor());
-		setUniformf(uniformName + ".intensity", baseLight.getIntensity());
-	}
-
-	public void setUniformPointLight(String uniformName, PointLight pointLight)
-	{
-		setUniformBaseLight(uniformName + ".base", pointLight);
-		setUniform(uniformName + ".position", pointLight.getGameObject().getTransformedTranslation());
-		setUniformf(uniformName + ".range", pointLight.getRange());
-		setUniformf(uniformName + ".atten.linear", pointLight.getLinear());
-		setUniformf(uniformName + ".atten.constant", pointLight.getConstant());
-		setUniformf(uniformName + ".atten.exponent", pointLight.getExponent());
-	}
 }
