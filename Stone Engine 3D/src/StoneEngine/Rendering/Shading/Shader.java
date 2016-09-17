@@ -93,16 +93,24 @@ public class Shader
 	public void addAllAttrubutes(String shaderText)
 	{
 		final String ATTRIBUTE_KEYWORD = "attribute";
-		int unformStartLocation = shaderText.indexOf(ATTRIBUTE_KEYWORD);
+		int attribLocation = shaderText.indexOf(ATTRIBUTE_KEYWORD);
 		
 		int attribNumber = 0;
 		
-		while (unformStartLocation != -1)
+		while (attribLocation != -1)
 		{
-			int start 	= unformStartLocation + ATTRIBUTE_KEYWORD.length() + 1;
+			if ((!Character.isWhitespace(shaderText.charAt(attribLocation-1)) && shaderText.charAt(attribLocation-1) != ';') ||
+				 !Character.isWhitespace(shaderText.charAt(attribLocation + ATTRIBUTE_KEYWORD.length()))
+				)
+			{
+				attribLocation = shaderText.indexOf(ATTRIBUTE_KEYWORD, attribLocation + ATTRIBUTE_KEYWORD.length());
+				continue;
+			}
+			
+			int start 	= attribLocation + ATTRIBUTE_KEYWORD.length() + 1;
 			int end 	= shaderText.indexOf(";", start);
 			
-			String attrubLine = shaderText.substring(start, end);
+			String attrubLine = shaderText.substring(start, end).trim().replaceAll("\\s+", " ");
 			String[] parts = attrubLine.split(" ");
 			
 			if (parts.length == 2)
@@ -112,7 +120,7 @@ public class Shader
 				setAttribLocation(name, attribNumber++);
 			}
 			
-			unformStartLocation = shaderText.indexOf(ATTRIBUTE_KEYWORD, end);
+			attribLocation = shaderText.indexOf(ATTRIBUTE_KEYWORD, end);
 		}
 	}
 	
@@ -126,6 +134,14 @@ public class Shader
 		
 		while (structStartLocation != -1)
 		{
+			if ((!Character.isWhitespace(shaderText.charAt(structStartLocation-1)) && shaderText.charAt(structStartLocation-1) != ';') ||
+				 !Character.isWhitespace(shaderText.charAt(structStartLocation + STRUCT_KEYWORD.length()))
+				)
+			{
+				structStartLocation = shaderText.indexOf(STRUCT_KEYWORD, structStartLocation + STRUCT_KEYWORD.length());
+				continue;
+			}
+			
 			int nameStart 	= structStartLocation + STRUCT_KEYWORD.length() + 1;
 			int braceStart 	= shaderText.indexOf("{", nameStart);
 			int end		 	= shaderText.indexOf("}", braceStart);
@@ -133,25 +149,23 @@ public class Shader
 			String structName = shaderText.substring(nameStart, braceStart).replaceAll("\\s", "");
 			ArrayList<GLSLVariableContainer> structComponents = new ArrayList<GLSLVariableContainer>();
 			
+			int lastComponentSimicolonPos = braceStart;
 			int componentSimicolonPos = shaderText.indexOf(";", nameStart);
 			while (componentSimicolonPos != -1 && componentSimicolonPos < end)
 			{
-				int componentNameStart = componentSimicolonPos;
+				String betweenSimicolons = shaderText.substring(lastComponentSimicolonPos+1, componentSimicolonPos);
+				betweenSimicolons = betweenSimicolons.trim().replaceAll("\\s+", " ");
 				
-				while (!Character.isWhitespace(shaderText.charAt(componentNameStart - 1)))
-					componentNameStart--;
+				String[] parts = betweenSimicolons.split(" ");
 				
-				int componentTypeEnd = componentNameStart - 1;
-				int componentTypeStart = componentTypeEnd;
-				
-				while (!Character.isWhitespace(shaderText.charAt(componentTypeStart - 1)))
-					componentTypeStart--;
-				
-				String componentName = shaderText.substring(componentNameStart, componentSimicolonPos);
-				String componentType = shaderText.substring(componentTypeStart, componentTypeEnd);
-				
-				structComponents.add(new GLSLVariableContainer(componentName, componentType));
-				
+				if (parts.length == 2)
+				{
+					String type = parts[0];
+					String name = parts[1];
+					structComponents.add(new GLSLVariableContainer(name, type));
+				}
+								
+				lastComponentSimicolonPos = componentSimicolonPos;
 				componentSimicolonPos = shaderText.indexOf(";", componentSimicolonPos + 1);
 			}
 			
@@ -176,10 +190,18 @@ public class Shader
 		
 		while (unformStartLocation != -1)
 		{
+			if ((!Character.isWhitespace(shaderText.charAt(unformStartLocation-1)) && shaderText.charAt(unformStartLocation-1) != ';') ||
+				 !Character.isWhitespace(shaderText.charAt(unformStartLocation + UNIFORM_KEYWORD.length()))
+				)
+			{
+				unformStartLocation = shaderText.indexOf(UNIFORM_KEYWORD, unformStartLocation + UNIFORM_KEYWORD.length());
+				continue;
+			}
+			
 			int start 	= unformStartLocation + UNIFORM_KEYWORD.length() + 1;
 			int end 	= shaderText.indexOf(";", start);
 			
-			String uniformLine = shaderText.substring(start, end);
+			String uniformLine = shaderText.substring(start, end).trim().replaceAll("\\s+", " ");
 			String[] parts = uniformLine.split(" ");
 			
 			if (parts.length == 2)
