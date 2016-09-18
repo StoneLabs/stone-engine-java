@@ -101,6 +101,15 @@ public class Transform
 		
 		return parentRotation.mul(rotation);
 	}
+
+	public void lookAt(Vector3f target, Vector3f up)
+	{
+		rotation = getLookAtDirection(target, up);
+	}
+	public Quaternion getLookAtDirection(Vector3f target, Vector3f up)
+	{
+		return new Quaternion(Matrix4f.rotation(target.sub(translation).normalize(), up));
+	}
 	
 	public Vector3f getTranslation() {
 		return translation;

@@ -1,5 +1,6 @@
 package StoneEngine.Scene.Lighting;
 
+import StoneEngine.Math.Attenuation;
 import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.Shader;
 import StoneEngine.ResourceLoader.ResourceLoader;
@@ -12,34 +13,29 @@ public class PointLight extends BaseLight
 	
 	private float range;
 	
-	private float constant;
-	private float linear;
-	private float exponent;
+	private Attenuation attenuation;
 	
-	public PointLight(Vector3f color, float intensity, float constant, float linear, float exponent) //todo: calc range auto.
+	public PointLight(Vector3f color, float intensity, Attenuation attenuation) //todo: calc range auto.
 	{				
-		this(color, intensity, constant, linear, exponent, 
-				calcRange(color, intensity, constant, linear, exponent));
+		this(color, intensity, attenuation, 
+				calcRange(color, intensity, attenuation));
 	}
-	public PointLight(Vector3f color, float intensity, float constant, float linear, float exponent, float range) //todo: calc range auto.
+	public PointLight(Vector3f color, float intensity, Attenuation attenuation, float range) //todo: calc range auto.
 	{
 		super(color, intensity);
 		
-		this.constant = constant;
-		this.linear = linear;
-		this.exponent = exponent;
-		
+		this.attenuation = attenuation;
 		this.range = range;
 		
 		setShader(PointShader);
 	}
 
-	private static float calcRange(Vector3f color, float intensity, float constant, float linear, float exponent)
+	private static float calcRange(Vector3f color, float intensity, Attenuation attenuation)
 	{
 
-		float a = exponent;
-		float b = linear;
-		float c = constant - COLOR_DEPTH * intensity * color.max();
+		float a = attenuation.getExponent();
+		float b = attenuation.getLinear();
+		float c = attenuation.getConstant() - COLOR_DEPTH * intensity * color.max();
 		
 		return (float)((-b + Math.sqrt(b*b - 4 * a * c)) / (2*a));
 	}
@@ -52,27 +48,7 @@ public class PointLight extends BaseLight
 		this.range = range;
 	}
 
-	public float getConstant() {
-		return constant;
-	}
-
-	public void setConstant(float constant) {
-		this.constant = constant;
-	}
-
-	public float getLinear() {
-		return linear;
-	}
-
-	public void setLinear(float linear) {
-		this.linear = linear;
-	}
-
-	public float getExponent() {
-		return exponent;
-	}
-
-	public void setExponent(float exponent) {
-		this.exponent = exponent;
+	public Attenuation getAttenuation() {
+		return attenuation;
 	}
 }

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import StoneEngine.Core.Util;
 import StoneEngine.Math.Vector2f;
 import StoneEngine.Math.Vector3f;
-import StoneEngine.Math.Vertex;
+import StoneEngine.Rendering.Vertex;
 
 public class IndexedModel
 {

@@ -1,10 +1,17 @@
 package StoneEngine.Core;
 
 import StoneEngine.Scene.GameObject;
+import StoneLabs.sutil.Debug;
 
 public abstract class Game
 {
 	private GameObject root;
+	
+	public Game()
+	{
+		Debug.Log("Loading game...");
+		root = new GameObject();
+	}
 	
 	public void init() {}
 	
@@ -14,5 +21,8 @@ public abstract class Game
 	}
 	
 	public GameObject getRootObject() //todo: make root object private
-	{ if (root == null) root = new GameObject(); return root; }
+	{ return root; }
+	
+	void setRootEngine(CoreEngine core)
+	{ root.setEngine(core); }
 }

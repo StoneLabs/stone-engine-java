@@ -1,21 +1,18 @@
 package StoneEngine.Game;
 
-import StoneEngine.Core.Input;
-import StoneEngine.Core.CoreEngine;
 import StoneEngine.Core.Game;
-import StoneEngine.ResourceLoader.ResourceLoader;
-import StoneEngine.ResourceLoader.Models.Mesh;
-import StoneEngine.ResourceLoader.Models.OBJ.OBJModel;
+import StoneEngine.Core.Input;
+import StoneEngine.Math.Attenuation;
 import StoneEngine.Math.Quaternion;
 import StoneEngine.Math.Vector2f;
 import StoneEngine.Math.Vector3f;
-import StoneEngine.Math.Vertex;
 import StoneEngine.Rendering.Material;
-import StoneEngine.Rendering.Shader;
+import StoneEngine.Rendering.Vertex;
 import StoneEngine.Rendering.Window;
+import StoneEngine.ResourceLoader.ResourceLoader;
+import StoneEngine.ResourceLoader.Models.Mesh;
+import StoneEngine.ResourceLoader.Models.OBJ.OBJModel;
 import StoneEngine.Scene.GameObject;
-import StoneEngine.Scene.Transform;
-import StoneEngine.Scene.Lighting.BaseLight;
 import StoneEngine.Scene.Lighting.DirectionalLight;
 import StoneEngine.Scene.Lighting.PointLight;
 import StoneEngine.Scene.Lighting.SpotLight;
@@ -30,6 +27,12 @@ public class TestGame extends Game
 	GameObject directionalLightTest2 = new GameObject();
 	GameObject monkey = new GameObject();
 	GameObject monkey2 = new GameObject();
+	GameObject cameraObject = new GameObject();
+	
+	public TestGame()
+	{
+		
+	}
 	
 	@Override
 	public void init()
@@ -62,9 +65,8 @@ public class TestGame extends Game
 		MeshRenderer meshRendererMonkey2 = new MeshRenderer(ResourceLoader.loadMesh("monkey.obj", OBJModel.class), material);
 
 		DirectionalLight directionalLight1 = new DirectionalLight(new Vector3f(1.0f,0f,0f), 0.4f);
-		PointLight pointLight1 = new PointLight(new Vector3f(0f, 0f, 1.0f), 1.0f, 0, 0, 0.5f);
-		SpotLight spotLight1 = new SpotLight(
-			new Vector3f(0,1,1), 0.4f,0,0,0.1f, 0.7f);
+		PointLight pointLight1 = new PointLight(new Vector3f(0f, 0f, 1.0f), 1.0f, new Attenuation(0, 0, 0.5f));
+		SpotLight spotLight1 = new SpotLight(new Vector3f(0,1,1), 0.4f, new Attenuation(0, 0, 0.1f), 0.7f);
 
 		//Creating gameObject
 		
@@ -101,8 +103,8 @@ public class TestGame extends Game
 		structureTest3.setScale(0.1f, 1f, 0.1f);
 		structureTest3.setTranslation(-1.0f, -1f, -1.0f);
 		
-		GameObject cameraObject = new GameObject();
 		cameraObject.addComponent(new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth()/(float)Window.getHeight(), 0.01f, 1000.0f));
+		cameraObject.addComponent(new FreeLook());
 		cameraObject.addChild(structureTest3);
 		
 		structureTest1.addChild(structureTest2);
@@ -130,5 +132,10 @@ public class TestGame extends Game
 		directionalLightTest2.rotate(Vector3f.YAXIS(), -deltaTime);
 		structureTest1.rotate(Vector3f.YAXIS(), deltaTime);
 		monkey.rotate(Vector3f.YAXIS(), deltaTime/2);
+		
+		Quaternion lookAtDirection = monkey2.getLookAtDirection(cameraObject.getTranslation(), Vector3f.YAXIS());
+		Quaternion currentRotation = monkey2.getRotation();
+		
+		monkey2.setRotation(currentRotation.sLerp(lookAtDirection, deltaTime * 2f, true));
 	}
 }

@@ -430,9 +430,9 @@ public class Shader
 		setUniformBaseLight(uniformName + ".base", pointLight);
 		setUniform(uniformName + ".position", pointLight.getGameObject().getTransformedTranslation());
 		setUniformf(uniformName + ".range", pointLight.getRange());
-		setUniformf(uniformName + ".atten.linear", pointLight.getLinear());
-		setUniformf(uniformName + ".atten.constant", pointLight.getConstant());
-		setUniformf(uniformName + ".atten.exponent", pointLight.getExponent());
+		setUniformf(uniformName + ".atten.linear", pointLight.getAttenuation().getLinear());
+		setUniformf(uniformName + ".atten.constant", pointLight.getAttenuation().getConstant());
+		setUniformf(uniformName + ".atten.exponent", pointLight.getAttenuation().getExponent());
 	}
 	public void setUniformSpotLight(String uniformName, SpotLight spotLight)
 	{

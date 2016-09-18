@@ -77,9 +77,6 @@ public class RenderingEngine
 	public void render(GameObject object)
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
-		lights.clear();
-		object.addToRenderingEngine(this); //Temp...
 
 		Shader forwardAmbient = ambientShader;
 		
