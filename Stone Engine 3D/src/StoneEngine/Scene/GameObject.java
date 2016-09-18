@@ -2,14 +2,15 @@ package StoneEngine.Scene;
 
 import java.util.ArrayList;
 
-import StoneEngine.Math.Matrix4f;
+import StoneEngine.Core.CoreEngine;
 import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.RenderingEngine;
-import StoneEngine.Rendering.Shading.Shader;
+import StoneEngine.Rendering.Shader;
 
 public class GameObject extends Transform //extends Transform is an experimental construct
 {
 	private GameObject parent = null;
+	private CoreEngine engine = null;
 	
 	private ArrayList<GameObject> children;
 	private ArrayList<GameComponent> components;
@@ -23,6 +24,7 @@ public class GameObject extends Transform //extends Transform is an experimental
 	public void addChild(GameObject child)
 	{
 		children.add(child);
+		child.setEngine(engine);
 		child.setParent(this);
 	}
 	
@@ -42,43 +44,47 @@ public class GameObject extends Transform //extends Transform is an experimental
 		for (GameObject child : children)
 			child.update(delta);
 	}
-	public void render(Shader shader)
+	public void render(Shader shader, RenderingEngine renderingEngine)
 	{		
 		for (GameComponent component : components)
-			component.render(shader);
+			component.render(shader, renderingEngine);
 		
 		for (GameObject child : children)
-			child.render(shader);
+			child.render(shader, renderingEngine);
 	}
 
-	//Temporary solution!
-	public void addToRenderingEngine(RenderingEngine renderingEngine)
+	public void setEngine(CoreEngine engine) 
 	{
+		if (this.engine == engine)
+			return;
+		
+		this.engine = engine;
+		
 		for (GameComponent component : components)
-			component.addToRenderingEngine(renderingEngine);
+			component.addToEngine(engine);
 		
 		for (GameObject child : children)
-			child.addToRenderingEngine(renderingEngine);
+			child.setEngine(engine);
 	}
-
-	public void move(Vector3f dir, float amnt)
+	
+	@SuppressWarnings("unchecked") //TODO remove clone?
+	public ArrayList<GameObject> getChildren()
+	{ return (ArrayList<GameObject>)children.clone(); }
+	
+	public ArrayList<GameObject> getAllChildren()
 	{
-		this.setTranslation(
-				this.getTranslation().add(
-						dir.mul(amnt)));
-	}
-	public void move(Vector3f amnt)
-	{
-		this.setTranslation(
-				this.getTranslation().add(amnt));
-	}
-
-	public GameObject getParent() {
-		return parent;
+		ArrayList<GameObject> result = new ArrayList<>();
+		
+		for (GameObject child : children)
+			result.addAll(child.getAllChildren());
+		
+		result.add(this);
+		return result;
 	}
 
-	private void setParent(GameObject parent) {
-		this.parent = parent;
-		super.setParent(parent);
-	}
+	public void move(Vector3f amnt) { this.setTranslation(this.getTranslation().add(amnt)); }
+	public void move(Vector3f dir, float amnt) { this.setTranslation(this.getTranslation().add(dir.mul(amnt))); }
+	private void setParent(GameObject parent) { this.parent = parent; super.setParent(parent); }
+	public GameObject getParent() { return parent; }
+	public CoreEngine getEngine() { return engine; }
 }

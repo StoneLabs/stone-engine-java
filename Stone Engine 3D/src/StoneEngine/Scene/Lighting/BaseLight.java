@@ -1,8 +1,8 @@
 package StoneEngine.Scene.Lighting;
 
+import StoneEngine.Core.CoreEngine;
 import StoneEngine.Math.Vector3f;
-import StoneEngine.Rendering.RenderingEngine;
-import StoneEngine.Rendering.Shading.Shader;
+import StoneEngine.Rendering.Shader;
 import StoneEngine.Scene.GameComponent;
 
 public class BaseLight extends GameComponent
@@ -18,11 +18,10 @@ public class BaseLight extends GameComponent
 		this.intensity = intensity;
 	}
 	
-	//Temporary solution!
 	@Override
-	public void addToRenderingEngine(RenderingEngine renderingEngine)
+	public void addToEngine(CoreEngine engine)
 	{
-		renderingEngine.addLight(this);
+		engine.getRenderingEngine().addLight(this);
 	}
 
 	public void setShader(Shader shader)

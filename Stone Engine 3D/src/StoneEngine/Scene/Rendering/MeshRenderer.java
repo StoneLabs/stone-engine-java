@@ -1,8 +1,9 @@
 package StoneEngine.Scene.Rendering;
 
 import StoneEngine.Rendering.Material;
-import StoneEngine.Rendering.Mesh;
-import StoneEngine.Rendering.Shading.Shader;
+import StoneEngine.Rendering.RenderingEngine;
+import StoneEngine.Rendering.Shader;
+import StoneEngine.ResourceLoader.Models.Mesh;
 import StoneEngine.Scene.GameComponent;
 
 public class MeshRenderer extends GameComponent
@@ -17,10 +18,10 @@ public class MeshRenderer extends GameComponent
 	}
 	
 	@Override
-	public void render(Shader shader)
+	public void render(Shader shader, RenderingEngine renderingEngine)
 	{
 		shader.bind();
-		shader.updateUniforms(getGameObject(), material);
+		shader.updateUniforms(getGameObject(), material, renderingEngine);
 		mesh.draw();
 	}
 }

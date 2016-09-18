@@ -7,11 +7,13 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import StoneEngine.Math.Vector2f;
+import StoneLabs.sutil.Debug;
 
 public class Window 
 {
 	public static void createWindow(int width, int height, String title)
 	{
+		Debug.Log("Creating display...");
 		Display.setTitle(title);
 		try 
 		{

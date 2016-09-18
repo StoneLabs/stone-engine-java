@@ -1,5 +1,6 @@
 package StoneEngine.Core;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.Arrays;
 import org.lwjgl.BufferUtils;
 
 import StoneEngine.Math.Matrix4f;
-import StoneEngine.Math.Vertex;
+import StoneEngine.Rendering.Vertex;
 
 public class Util
 {
@@ -77,5 +78,10 @@ public class Util
 	public static int[] toIntArray(Integer... data)
 	{
 		return Arrays.stream(data).mapToInt(Integer::intValue).toArray();
+	}
+	
+	public static ByteBuffer createByteBuffer(int size)
+	{
+		return BufferUtils.createByteBuffer(size);
 	}
 }

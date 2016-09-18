@@ -1,7 +1,8 @@
 package StoneEngine.Scene;
 
+import StoneEngine.Core.CoreEngine;
 import StoneEngine.Rendering.RenderingEngine;
-import StoneEngine.Rendering.Shading.Shader;
+import StoneEngine.Rendering.Shader;
 
 public abstract class GameComponent
 {
@@ -12,7 +13,7 @@ public abstract class GameComponent
 		
 	}
 	
-	public void render(Shader shader)
+	public void render(Shader shader, RenderingEngine renderingEngine)
 	{
 		
 	}
@@ -26,9 +27,5 @@ public abstract class GameComponent
 		return parent;
 	}
 	
-	//Temporary solution!
-	public void addToRenderingEngine(RenderingEngine renderingEngine)
-	{
-		
-	}
+	public void addToEngine(CoreEngine engine) {}
 }

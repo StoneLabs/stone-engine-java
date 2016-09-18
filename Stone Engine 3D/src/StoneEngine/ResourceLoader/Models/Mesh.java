@@ -1,4 +1,4 @@
-package StoneEngine.Rendering;
+package StoneEngine.ResourceLoader.Models;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
@@ -6,19 +6,20 @@ import static org.lwjgl.opengl.GL20.*;
 
 import StoneEngine.Core.Util;
 import StoneEngine.Math.Vector3f;
-import StoneEngine.Math.Vertex;
+import StoneEngine.Rendering.Vertex;
 
 public class Mesh
 {
-	private int vbo; //VERTEX pointer
-	private int ibo; //INDEX  pointer
-	private int size;
+	private MeshResource resource;
 	
 	public Mesh()
 	{
-		vbo = glGenBuffers();
-		ibo = glGenBuffers();
-		size = 0;
+		this.resource = new MeshResource();
+	}
+	public Mesh(MeshResource resource)
+	{
+		this.resource = resource;
+		resource.addReference();
 	}
 	public Mesh(Vertex[] vertices, int[] indices)
 	{
@@ -31,6 +32,12 @@ public class Mesh
 		addVertices(vertices, indices, calcNormals);
 	}
 
+	@Override
+	public void finalize()
+	{
+		resource.removeReference();
+	}
+
 	public void addVertices(Vertex[] vertices, int[] indices)
 	{
 		addVertices(vertices, indices, false);
@@ -39,12 +46,12 @@ public class Mesh
 	{
 		if (calcNormals) calcNormals(vertices, indices);
 		
-		size = indices.length;
+		resource.setSize(indices.length);
 		
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, resource.getVbo());
 		glBufferData(GL_ARRAY_BUFFER, Util.createFlippedBuffer(vertices), GL_STATIC_DRAW);
 		
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource.getIbo());
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, Util.createFlippedBuffer(indices), GL_STATIC_DRAW);
 	}
 	
@@ -54,13 +61,13 @@ public class Mesh
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
 		
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, resource.getVbo());
 		glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * 4, 0);  //pos
 		glVertexAttribPointer(1, 2, GL_FLOAT, false, Vertex.SIZE * 4, 12); //texCoord: 4*float = 4*3bytes = 12b
 		glVertexAttribPointer(2, 3, GL_FLOAT, false, Vertex.SIZE * 4, 20); //normals: 8b + 12
 		
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-		glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource.getIbo());
+		glDrawElements(GL_TRIANGLES, resource.getSize(), GL_UNSIGNED_INT, 0);
 		
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
@@ -88,4 +95,6 @@ public class Mesh
 		for (int i = 0; i < vertices.length; i++)
 			vertices[i].setNormal(vertices[i].getNormal().normalize());
 	}
+	
+	public MeshResource getBuffers() { return resource; }
 }

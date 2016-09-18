@@ -3,8 +3,6 @@ package StoneEngine.Scene;
 import StoneEngine.Math.Matrix4f;
 import StoneEngine.Math.Quaternion;
 import StoneEngine.Math.Vector3f;
-import StoneEngine.Scene.Rendering.Camera;
-import StoneLabs.sutil.Debug;
 
 public class Transform 
 {
@@ -102,6 +100,15 @@ public class Transform
 			parentRotation = parent.getTransformedRotation();
 		
 		return parentRotation.mul(rotation);
+	}
+
+	public void lookAt(Vector3f target, Vector3f up)
+	{
+		rotation = getLookAtDirection(target, up);
+	}
+	public Quaternion getLookAtDirection(Vector3f target, Vector3f up)
+	{
+		return new Quaternion(Matrix4f.rotation(target.sub(translation).normalize(), up));
 	}
 	
 	public Vector3f getTranslation() {

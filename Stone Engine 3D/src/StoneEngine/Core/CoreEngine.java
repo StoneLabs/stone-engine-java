@@ -6,9 +6,21 @@ import StoneLabs.sutil.Debug;
 
 public class CoreEngine 
 {	
+	public static class Time
+	{
+		private static final long C_SECONDS = 1000000000;
+		
+		public static double getTime()
+		{
+			return (double)System.nanoTime()/(double)C_SECONDS;
+		}
+	}
+
+	private RenderingEngine renderingEngine;
+	
 	private boolean isRunning;
 	private Game game;
-	private RenderingEngine renderingEngine;
+	
 	private int width, height;
 	private float frameTime;
 	
@@ -19,6 +31,8 @@ public class CoreEngine
 		this.width = width;
 		this.height = height;
 		this.frameTime = 1.0f/framerate;
+		
+		this.game.setRootEngine(this);
 	}
 		
 	public void createWindow(String title)
@@ -108,4 +122,6 @@ public class CoreEngine
 	{
 		Window.dispose();
 	}
+	
+	public RenderingEngine getRenderingEngine() { return renderingEngine; }
 }

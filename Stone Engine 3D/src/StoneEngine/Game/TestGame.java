@@ -1,21 +1,18 @@
 package StoneEngine.Game;
 
-import StoneEngine.Core.Input;
-import StoneEngine.Core.CoreEngine;
 import StoneEngine.Core.Game;
-import StoneEngine.Core.ResourceLoader;
-import StoneEngine.Core.Time;
+import StoneEngine.Core.Input;
+import StoneEngine.Math.Attenuation;
 import StoneEngine.Math.Quaternion;
 import StoneEngine.Math.Vector2f;
 import StoneEngine.Math.Vector3f;
-import StoneEngine.Math.Vertex;
 import StoneEngine.Rendering.Material;
-import StoneEngine.Rendering.Mesh;
+import StoneEngine.Rendering.Vertex;
 import StoneEngine.Rendering.Window;
-import StoneEngine.Rendering.Shading.Shader;
+import StoneEngine.ResourceLoader.ResourceLoader;
+import StoneEngine.ResourceLoader.Models.Mesh;
+import StoneEngine.ResourceLoader.Models.OBJ.OBJModel;
 import StoneEngine.Scene.GameObject;
-import StoneEngine.Scene.Transform;
-import StoneEngine.Scene.Lighting.BaseLight;
 import StoneEngine.Scene.Lighting.DirectionalLight;
 import StoneEngine.Scene.Lighting.PointLight;
 import StoneEngine.Scene.Lighting.SpotLight;
@@ -26,6 +23,17 @@ import StoneLabs.sutil.Debug;
 @SuppressWarnings("unused") //TODO REMOVE
 public class TestGame extends Game
 {
+	GameObject structureTest1 = new GameObject();
+	GameObject directionalLightTest2 = new GameObject();
+	GameObject monkey = new GameObject();
+	GameObject monkey2 = new GameObject();
+	GameObject cameraObject = new GameObject();
+	
+	public TestGame()
+	{
+		
+	}
+	
 	@Override
 	public void init()
 	{
@@ -43,17 +51,22 @@ public class TestGame extends Game
 				2, 1, 3};
 
 		Mesh mesh = new Mesh(vertices, indices, true);
-		Material material = new Material(ResourceLoader.loadTexture("test.png"), new Vector3f(1,1,1), 1, 8);
+		Material material = new Material();
+		material.addTexture("diffuse", ResourceLoader.loadTexture("test.png"));
+		material.addFloat("specularIntensity", 0.5f);
+		material.addFloat("specularExponent", 32f);
 
 		MeshRenderer meshRenderer = new MeshRenderer(mesh, material);
 		MeshRenderer meshRenderer1 = new MeshRenderer(mesh, material);
 		MeshRenderer meshRenderer2 = new MeshRenderer(mesh, material);
 		MeshRenderer meshRenderer3 = new MeshRenderer(mesh, material);
+		
+		MeshRenderer meshRendererMonkey = new MeshRenderer(ResourceLoader.loadMesh("monkey.obj", OBJModel.class), material);
+		MeshRenderer meshRendererMonkey2 = new MeshRenderer(ResourceLoader.loadMesh("monkey.obj", OBJModel.class), material);
 
 		DirectionalLight directionalLight1 = new DirectionalLight(new Vector3f(1.0f,0f,0f), 0.4f);
-		PointLight pointLight1 = new PointLight(new Vector3f(0f, 0f, 1.0f), 1.0f, 0, 0, 0.5f);
-		SpotLight spotLight1 = new SpotLight(
-			new Vector3f(0,1,1), 0.4f,0,0,0.1f, 0.7f);
+		PointLight pointLight1 = new PointLight(new Vector3f(0f, 0f, 1.0f), 1.0f, new Attenuation(0, 0, 0.5f));
+		SpotLight spotLight1 = new SpotLight(new Vector3f(0,1,1), 0.4f, new Attenuation(0, 0, 0.1f), 0.7f);
 
 		//Creating gameObject
 		
@@ -65,7 +78,6 @@ public class TestGame extends Game
 		directionalLightTest1.setRotation(Quaternion.rotation(directionalLightTest1.getRotation().getRight(), (float)Math.toRadians(-45)));
 		directionalLightTest1.addComponent(directionalLight1);
 		
-		GameObject directionalLightTest2 = new GameObject();
 		directionalLightTest2.setTranslation(2, 0, 0);
 		directionalLightTest2.setRotation(Quaternion.rotation(new Vector3f(0,1,0), (float)Math.toRadians(90)));
 		directionalLightTest2.addComponent(pointLight1);
@@ -76,7 +88,6 @@ public class TestGame extends Game
 		getRootObject().addChild(directionalLightTest1);
 		getRootObject().addChild(directionalLightTest2);
 		
-		GameObject structureTest1 = new GameObject();
 		structureTest1.addComponent(meshRenderer1);
 		structureTest1.setScale(0.1f, 0.1f, 0.1f);
 		structureTest1.setRotation(Quaternion.rotation(Vector3f.YAXIS(), 0.785f));
@@ -89,16 +100,42 @@ public class TestGame extends Game
 
 		GameObject structureTest3 = new GameObject();
 		structureTest3.addComponent(meshRenderer3);
-		structureTest3.setScale(1f, 1f, 1f);
-		structureTest3.setTranslation(-10.0f, -5.0f, -10.0f);
+		structureTest3.setScale(0.1f, 1f, 0.1f);
+		structureTest3.setTranslation(-1.0f, -1f, -1.0f);
 		
-		GameObject cameraObject = new GameObject();
 		cameraObject.addComponent(new Camera((float)Math.toRadians(70.0f), (float)Window.getWidth()/(float)Window.getHeight(), 0.01f, 1000.0f));
+		cameraObject.addComponent(new FreeLook());
 		cameraObject.addChild(structureTest3);
 		
 		structureTest1.addChild(structureTest2);
-		structureTest2.addChild(cameraObject);
 		
+		this.getRootObject().addChild(cameraObject);
 		this.getRootObject().addChild(structureTest1);
+		
+		monkey.addComponent(meshRendererMonkey);
+		monkey.setScale(2f, 2f, 2f);
+		monkey.setTranslation(10, 5, 10);
+		
+		monkey2.addComponent(meshRendererMonkey2);
+		monkey2.setScale(2f, 2f, 2f);
+		monkey2.setTranslation(15, 5, 15);
+		
+		this.getRootObject().addChild(monkey);
+		this.getRootObject().addChild(monkey2);	
+	}
+	
+	@Override
+	public void update(float deltaTime)
+	{
+		super.update(deltaTime);
+
+		directionalLightTest2.rotate(Vector3f.YAXIS(), -deltaTime);
+		structureTest1.rotate(Vector3f.YAXIS(), deltaTime);
+		monkey.rotate(Vector3f.YAXIS(), deltaTime/2);
+		
+		Quaternion lookAtDirection = monkey2.getLookAtDirection(cameraObject.getTranslation(), Vector3f.YAXIS());
+		Quaternion currentRotation = monkey2.getRotation();
+		
+		monkey2.setRotation(currentRotation.sLerp(lookAtDirection, deltaTime * 2f, true));
 	}
 }
