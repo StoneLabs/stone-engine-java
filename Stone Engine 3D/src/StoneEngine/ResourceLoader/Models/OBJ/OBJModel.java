@@ -10,7 +10,6 @@ import StoneEngine.ResourceLoader.Models.IndexedModel;
 import StoneEngine.ResourceLoader.Models.ResourceModel;
 import StoneEngine.Math.Vector2f;
 import StoneEngine.Math.Vector3f;
-import StoneLabs.sutil.Debug;
 
 public class OBJModel implements ResourceModel
 {

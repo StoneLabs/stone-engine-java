@@ -6,6 +6,17 @@ import StoneLabs.sutil.Debug;
 
 public class CoreEngine 
 {	
+	public static class Time
+	{
+		private static final long C_SECONDS = 1000000000;
+		
+		public static double getTime()
+		{
+			return (double)System.nanoTime()/(double)C_SECONDS;
+		}
+	}
+
+	
 	private boolean isRunning;
 	private Game game;
 	private RenderingEngine renderingEngine;

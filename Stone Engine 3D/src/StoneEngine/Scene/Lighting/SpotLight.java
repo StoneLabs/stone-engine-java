@@ -1,12 +1,13 @@
 package StoneEngine.Scene.Lighting;
 
 import StoneEngine.Math.Vector3f;
-import StoneEngine.Rendering.RenderingEngine;
-import StoneEngine.Rendering.Shading.ForwardSpot;
-import StoneEngine.Scene.GameComponent;
+import StoneEngine.Rendering.Shader;
+import StoneEngine.ResourceLoader.ResourceLoader;
 
 public class SpotLight extends PointLight
 {
+	private static Shader SpotShader = ResourceLoader.loadShader("shaders/forward-spot.shader");
+	
 	private float cutoff;
 
 	public SpotLight(Vector3f color, float intensity, float constant, float linear, float exponent, float cutoff)
@@ -15,7 +16,7 @@ public class SpotLight extends PointLight
 		
 		this.cutoff = cutoff;
 		
-		this.setShader(ForwardSpot.getInstance());
+		this.setShader(SpotShader);
 		
 	}
 	public SpotLight(Vector3f color, float intensity, float constant, float linear, float exponent, float range, float cutoff)
@@ -24,7 +25,7 @@ public class SpotLight extends PointLight
 		
 		this.cutoff = cutoff;
 		
-		this.setShader(ForwardSpot.getInstance());
+		this.setShader(SpotShader);
 	}
 	
 	public float getCutoff() {

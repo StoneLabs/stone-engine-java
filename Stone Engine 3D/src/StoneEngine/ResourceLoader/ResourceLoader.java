@@ -27,6 +27,7 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 
 import StoneEngine.Core.Util;
+import StoneEngine.Rendering.Shader;
 import StoneEngine.ResourceLoader.Models.IndexedModel;
 import StoneEngine.ResourceLoader.Models.Mesh;
 import StoneEngine.ResourceLoader.Models.MeshResource;
@@ -99,8 +100,70 @@ public class ResourceLoader
 		return loadedTextures;
 	}
 
+
+	public static Shader loadShader(String fileName)
+	{
+		Debug.Log("Loading SHADER GROUP: " + fileName);
+		
+		BufferedReader shaderReader = null;
+		String vertexFile = null, fragmentFile = null, geometryFile = null;
+		
+		try
+		{
+			shaderReader = new BufferedReader(new FileReader("./res/" + fileName));
+			String line;
+			while ((line = shaderReader.readLine()) != null)
+			{
+				if (line.charAt(0) == '#') continue;
+				String[] parts = line.split("\\s+");
+				
+				if (parts.length == 2)
+				{
+					switch (parts[0])
+					{
+						case "vs":
+							vertexFile = parts[1];
+							break;
+						case "fs":
+							fragmentFile = parts[1];
+							break;
+						case "gs":
+							geometryFile = parts[1];
+							break;
+					}
+				}
+			}
+		}
+		catch (Exception e) { e.printStackTrace(); }
+				
+		return loadShader(vertexFile, fragmentFile, geometryFile);
+	}
+	public static Shader loadShader(String vertexFile, String fragmentFile, String geometryFile)
+	{
+		String vertexShader = null;		if (vertexFile != null)		vertexShader = readShader(vertexFile);
+		String fragmentShader = null; 	if (fragmentFile != null)	fragmentShader = readShader(fragmentFile);
+		String geometryShader = null; 	if (geometryFile != null)	geometryShader = readShader(geometryFile);
+		
+		Shader shader = new Shader();
+		
+		if (vertexShader != null)	shader.addVertexShader(vertexShader);
+		if (fragmentShader != null)	shader.addFragmentShader(fragmentShader);
+		if (geometryShader != null)	shader.addGeometryShader(geometryShader);
+
+		if (vertexShader != null)	shader.addAllAttrubutes(vertexShader);
+		if (fragmentShader != null)	shader.addAllAttrubutes(fragmentShader);
+		if (geometryShader != null)	shader.addAllAttrubutes(geometryShader);
+		
+		shader.compileShader();
+		
+		if (vertexShader != null)	shader.addAllUniforms(vertexShader);
+		if (fragmentShader != null)	shader.addAllUniforms(fragmentShader);
+		if (geometryShader != null)	shader.addAllUniforms(geometryShader);
+		
+		return shader;
+	}
 	
-	public static String loadShader(String fileName)
+	private static String readShader(String fileName)
 	{
 		Debug.Log("Loading SHADER: " + fileName);
 		StringBuilder shaderSource = new StringBuilder();
@@ -118,7 +181,7 @@ public class ResourceLoader
 				if  (line.startsWith(INCLIDE_DIRECTIVE))
 				{
 					String subFile = line.substring(INCLIDE_DIRECTIVE.length() + 2, line.length() - 1);
-					shaderSource.append(loadShader(subFile)).append("\n");
+					shaderSource.append(readShader(subFile)).append("\n");
 				}
 				else
 					shaderSource.append(line).append("\n");

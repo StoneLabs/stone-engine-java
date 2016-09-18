@@ -2,7 +2,6 @@ package StoneEngine.Scene.Rendering;
 
 import StoneEngine.Core.Input;
 import StoneEngine.Math.Matrix4f;
-import StoneEngine.Math.Quaternion;
 import StoneEngine.Math.Vector2f;
 import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.RenderingEngine;

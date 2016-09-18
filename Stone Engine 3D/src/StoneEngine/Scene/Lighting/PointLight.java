@@ -1,13 +1,13 @@
 package StoneEngine.Scene.Lighting;
 
 import StoneEngine.Math.Vector3f;
-import StoneEngine.Rendering.RenderingEngine;
-import StoneEngine.Rendering.Shading.ForwardPoint;
-import StoneEngine.Scene.GameComponent;
-import StoneLabs.sutil.Debug;
+import StoneEngine.Rendering.Shader;
+import StoneEngine.ResourceLoader.ResourceLoader;
 
 public class PointLight extends BaseLight
 {
+	private static Shader PointShader = ResourceLoader.loadShader("shaders/forward-point.shader");
+	
 	private static final int COLOR_DEPTH = 256;
 	
 	private float range;
@@ -31,7 +31,7 @@ public class PointLight extends BaseLight
 		
 		this.range = range;
 		
-		setShader(ForwardPoint.getInstance());
+		setShader(PointShader);
 	}
 
 	private static float calcRange(Vector3f color, float intensity, float constant, float linear, float exponent)

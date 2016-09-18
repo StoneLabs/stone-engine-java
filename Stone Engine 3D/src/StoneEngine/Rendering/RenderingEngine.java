@@ -12,7 +12,6 @@ import static org.lwjgl.opengl.GL11.GL_LESS;
 import static org.lwjgl.opengl.GL11.GL_ONE;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_VERSION;
-import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glClearColor;
@@ -28,12 +27,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import StoneEngine.Math.Vector3f;
-import StoneEngine.Rendering.Shading.ForwardAmbient;
-import StoneEngine.Rendering.Shading.ForwardDirectional;
-import StoneEngine.Rendering.Shading.ForwardPoint;
-import StoneEngine.Rendering.Shading.ForwardSpot;
-import StoneEngine.Rendering.Shading.Shader;
-import StoneEngine.ResourceLoader.Textures.Texture;
+import StoneEngine.ResourceLoader.ResourceLoader;
 import StoneEngine.Scene.GameObject;
 import StoneEngine.Scene.Lighting.BaseLight;
 import StoneEngine.Scene.Rendering.Camera;
@@ -50,6 +44,8 @@ public class RenderingEngine
 	
 	private HashMap<String, Vector3f> vector3fHashMap;
 	private HashMap<String, Float> floatHashMap;
+	
+	private Shader ambientShader;
 
 	public RenderingEngine()
 	{
@@ -62,6 +58,8 @@ public class RenderingEngine
 		vector3fHashMap.put("ambient", new Vector3f(0.1f, 0.1f, 0.1f));
 		
 		samplerMap.put("diffuse", 0);
+		
+		ambientShader = ResourceLoader.loadShader("shaders\\forward-ambient.shader");
 		
 		Debug.Log("OpenGL " + RenderingEngine.getOpenGLVersion());
 		
@@ -83,7 +81,7 @@ public class RenderingEngine
 		lights.clear();
 		object.addToRenderingEngine(this); //Temp...
 
-		Shader forwardAmbient = ForwardAmbient.getInstance();
+		Shader forwardAmbient = ambientShader;
 		
 		{ //Actual render pipeline
 			object.render(forwardAmbient, this); //Initial render cycle

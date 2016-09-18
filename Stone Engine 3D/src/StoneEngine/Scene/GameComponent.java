@@ -1,7 +1,7 @@
 package StoneEngine.Scene;
 
 import StoneEngine.Rendering.RenderingEngine;
-import StoneEngine.Rendering.Shading.Shader;
+import StoneEngine.Rendering.Shader;
 
 public abstract class GameComponent
 {

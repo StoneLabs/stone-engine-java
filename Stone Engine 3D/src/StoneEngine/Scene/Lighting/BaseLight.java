@@ -2,7 +2,7 @@ package StoneEngine.Scene.Lighting;
 
 import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.RenderingEngine;
-import StoneEngine.Rendering.Shading.Shader;
+import StoneEngine.Rendering.Shader;
 import StoneEngine.Scene.GameComponent;
 
 public class BaseLight extends GameComponent

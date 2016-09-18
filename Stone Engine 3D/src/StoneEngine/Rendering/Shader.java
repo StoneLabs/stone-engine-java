@@ -1,4 +1,4 @@
-package StoneEngine.Rendering.Shading;
+package StoneEngine.Rendering;
 
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL32.*;
@@ -9,9 +9,6 @@ import java.util.HashMap;
 import StoneEngine.Core.Util;
 import StoneEngine.Math.Matrix4f;
 import StoneEngine.Math.Vector3f;
-import StoneEngine.Rendering.Material;
-import StoneEngine.Rendering.RenderingEngine;
-import StoneEngine.ResourceLoader.ResourceLoader;
 import StoneEngine.ResourceLoader.Textures.Texture;
 import StoneEngine.Scene.Transform;
 import StoneEngine.Scene.Lighting.BaseLight;
@@ -54,6 +51,7 @@ public class Shader
 			this.location = location;
 		}
 		
+		@SuppressWarnings("unused")
 		public String getType() {
 			return type;
 		}
@@ -97,32 +95,6 @@ public class Shader
 		
 		if (program == 0x0)
 			Debug.Error("Shader Creation Failed: Could not find valid memory location in constructor!");
-	}
-	public Shader(String vertexShader)
-	{
-		this(vertexShader, null, null);
-	}
-	public Shader(String vertexShader, String fragmentShader)
-	{
-		this(vertexShader, fragmentShader, null);
-	}
-	public Shader(String vertexShader, String fragmentShader, String geometryShader)
-	{
-		this();
-		
-		if (vertexShader != null) addVertexShader(vertexShader);
-		if (fragmentShader != null) addFragmentShader(fragmentShader);
-		if (geometryShader != null) addGeometryShader(geometryShader);
-
-		if (vertexShader != null) addAllAttrubutes(vertexShader);
-		if (fragmentShader != null) addAllAttrubutes(fragmentShader);
-		if (geometryShader != null) addAllAttrubutes(geometryShader);
-		
-		compileShader();
-		
-		if (vertexShader != null) addAllUniforms(vertexShader);
-		if (fragmentShader != null) addAllUniforms(fragmentShader);
-		if (geometryShader != null) addAllUniforms(geometryShader);
 	}
 	
 	public void bind()

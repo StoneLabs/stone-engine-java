@@ -2,10 +2,9 @@ package StoneEngine.Scene;
 
 import java.util.ArrayList;
 
-import StoneEngine.Math.Matrix4f;
 import StoneEngine.Math.Vector3f;
 import StoneEngine.Rendering.RenderingEngine;
-import StoneEngine.Rendering.Shading.Shader;
+import StoneEngine.Rendering.Shader;
 
 public class GameObject extends Transform //extends Transform is an experimental construct
 {
