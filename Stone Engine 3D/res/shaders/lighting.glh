@@ -1,7 +1,10 @@
+varying vec2 texCoord0;
+varying mat3 tbnMatrix0;
+varying vec3 worldPos0;
+
 uniform vec3 C_CAMERAPOS_eyepos;
 uniform float M_specularIntensity;
 uniform float M_specularExponent;
-
 
 struct BaseLight
 {

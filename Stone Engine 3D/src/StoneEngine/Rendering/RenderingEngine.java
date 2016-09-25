@@ -49,6 +49,8 @@ public class RenderingEngine
 
 	public RenderingEngine()
 	{
+		Debug.Log("OpenGL " + RenderingEngine.getOpenGLVersion());
+		
 		lights = new ArrayList<BaseLight>();
 		samplerMap = new HashMap<String, Integer>();
 
@@ -58,10 +60,9 @@ public class RenderingEngine
 		vector3fHashMap.put("ambient", new Vector3f(0.1f, 0.1f, 0.1f));
 		
 		samplerMap.put("diffuse", 0);
+		samplerMap.put("normalMap", 1);
 		
 		ambientShader = ResourceLoader.loadShader("shaders\\forward-ambient.shader");
-		
-		Debug.Log("OpenGL " + RenderingEngine.getOpenGLVersion());
 		
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		
@@ -103,7 +104,11 @@ public class RenderingEngine
 		}
 	}
 
-	public int getSamplerSlot(String samplerName) { return samplerMap.get(samplerName); }
+	public int getSamplerSlot(String samplerName) 
+	{ 
+		if (!samplerMap.containsKey(samplerName)) Debug.Error("Sampler slot could not be found: " + samplerName);
+		return samplerMap.get(samplerName); 
+	}
 	
 	public static String getOpenGLVersion()	{ return glGetString(GL_VERSION); }
 	public Camera getMainCamera()			{ return mainCamera; }	

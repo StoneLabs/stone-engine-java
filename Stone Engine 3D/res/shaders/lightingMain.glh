@@ -1,0 +1,8 @@
+uniform sampler2D R_SAMPLER2D_diffuse;
+uniform sampler2D R_SAMPLER2D_normalMap;
+
+void main()
+{
+	vec3 normal = normalize(tbnMatrix0 * (255.0/128.0 * texture2D(R_SAMPLER2D_normalMap, texCoord0.xy).xyz - 1));
+	gl_FragColor = texture2D(R_SAMPLER2D_diffuse, texCoord0.xy) * calcLightingEffect(normal, worldPos0);
+}

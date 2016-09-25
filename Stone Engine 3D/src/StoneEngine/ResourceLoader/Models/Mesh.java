@@ -38,11 +38,7 @@ public class Mesh
 		resource.removeReference();
 	}
 
-	public void addVertices(Vertex[] vertices, int[] indices)
-	{
-		addVertices(vertices, indices, false);
-	}
-	public void addVertices(Vertex[] vertices, int[] indices, boolean calcNormals)
+	private void addVertices(Vertex[] vertices, int[] indices, boolean calcNormals)
 	{
 		if (calcNormals) calcNormals(vertices, indices);
 		
@@ -60,11 +56,14 @@ public class Mesh
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
+		glEnableVertexAttribArray(3);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, resource.getVbo());
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * 4, 0);  //pos
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, Vertex.SIZE * 4, 12); //texCoord: 4*float = 4*3bytes = 12b
-		glVertexAttribPointer(2, 3, GL_FLOAT, false, Vertex.SIZE * 4, 20); //normals: 8b + 12
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * 4, 0);  //pos 		(OFFSET: 0 ; SIZE = 3*float = 12b)
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, Vertex.SIZE * 4, 12); //texCoord	(OFFSET: 12; SIZE = 2*float = 8b )
+		glVertexAttribPointer(2, 3, GL_FLOAT, false, Vertex.SIZE * 4, 20); //nromals	(OFFSET: 20; SIZE = 3*float = 12b)
+		glVertexAttribPointer(3, 3, GL_FLOAT, false, Vertex.SIZE * 4, 32); //tangent	(OFFSET: 32; SIZE = 3*float = 12b)
+		glVertexAttribPointer(3, 3, GL_FLOAT, false, Vertex.SIZE * 4, 44); //dont know why actually... (doesnt work without)
 		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource.getIbo());
 		glDrawElements(GL_TRIANGLES, resource.getSize(), GL_UNSIGNED_INT, 0);
@@ -72,6 +71,7 @@ public class Mesh
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(2);
+		glDisableVertexAttribArray(3);
 	}
 	
 	private void calcNormals(Vertex[] vertices, int[] indices)
