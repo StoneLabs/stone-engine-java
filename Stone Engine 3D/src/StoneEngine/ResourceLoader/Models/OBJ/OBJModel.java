@@ -8,6 +8,7 @@ import java.util.HashMap;
 import StoneEngine.Core.Util;
 import StoneEngine.ResourceLoader.Models.IndexedModel;
 import StoneEngine.ResourceLoader.Models.ResourceModel;
+import StoneLabs.sutil.Debug;
 import StoneEngine.Math.Vector2f;
 import StoneEngine.Math.Vector3f;
 
@@ -143,8 +144,6 @@ public class OBJModel implements ResourceModel
 				result.getTexCoords().add(currentTexCoord);
 				if (hasNormals)
 					result.getNormals().add(currentNormal);
-				
-				result.getTangents().add(Vector3f.NULL()); //Default tangent
 			}
 			
 			Integer normalModelIndex = normalIndexMap.get(currentIndex.vertexIndex);
@@ -179,7 +178,7 @@ public class OBJModel implements ResourceModel
 		
 		for (int i = 0; i < result.getPositions().size(); i++) //add them back to result mesh
 			result.getTangents().add(normalModel.getTangents().get(indexMap.get(i)));
-		
+				
 		return result;
 	}
 }

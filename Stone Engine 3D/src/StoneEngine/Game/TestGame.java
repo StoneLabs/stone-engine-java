@@ -39,18 +39,19 @@ public class TestGame extends Game
 	{
 		//Creating components
 		
-		float fieldDepth = 20.0f;
-		float fieldWidth = 20.0f;
+//		float fieldDepth = 20.0f;
+//		float fieldWidth = 20.0f;
+//
+//		Vertex[] vertices = new Vertex[] { 	new Vertex( new Vector3f(-fieldWidth, 0.0f, -fieldDepth), new Vector2f(0.0f, 0.0f)),
+//				new Vertex( new Vector3f(-fieldWidth, 0.0f, fieldDepth), new Vector2f(0.0f, 1.0f)),
+//				new Vertex( new Vector3f(fieldWidth, 0.0f, -fieldDepth), new Vector2f(1.0f, 0.0f)),
+//				new Vertex( new Vector3f(fieldWidth, 0.0f, fieldDepth), new Vector2f(1.0f, 1.0f))};
+//
+//		int indices[] = { 0, 1, 2,
+//				2, 1, 3};
 
-		Vertex[] vertices = new Vertex[] { 	new Vertex( new Vector3f(-fieldWidth, 0.0f, -fieldDepth), new Vector2f(0.0f, 0.0f)),
-				new Vertex( new Vector3f(-fieldWidth, 0.0f, fieldDepth), new Vector2f(0.0f, 1.0f)),
-				new Vertex( new Vector3f(fieldWidth, 0.0f, -fieldDepth), new Vector2f(1.0f, 0.0f)),
-				new Vertex( new Vector3f(fieldWidth, 0.0f, fieldDepth), new Vector2f(1.0f, 1.0f))};
-
-		int indices[] = { 0, 1, 2,
-				2, 1, 3};
-
-		Mesh mesh = new Mesh(vertices, indices, true);
+		Mesh mesh = ResourceLoader.loadMesh("models/plane.obj", OBJModel.class);
+		
 		Material material = new Material();
 		material.addTexture("diffuse", ResourceLoader.loadTexture("textures/test.png"));
 		material.addTexture("normalMap", ResourceLoader.loadTexture("textures/default_normal.png"));
