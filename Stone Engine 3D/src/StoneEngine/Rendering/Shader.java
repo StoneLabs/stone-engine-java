@@ -5,6 +5,8 @@ import static org.lwjgl.opengl.GL32.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import StoneEngine.Core.Util;
 import StoneEngine.Math.Matrix4f;
@@ -60,30 +62,74 @@ public class Shader
 			return location;
 		}
 	}
-
-	private static final String KEYWORD_VEC3	= "vec3"	;
-	private static final String KEYWORD_FLOAT	= "float"	;
-	
-	private static final String STRUCT_DIRECTIONAL	= "DirectionalLight";
-	private static final String STRUCT_POINT		= "PointLight"		;
-	private static final String STRUCT_SPOT			= "SpotLight"		;
-	
 	private static final String KEYWORD_ATTRIBUTE	= "attribute"	;
 	private static final String KEYWORD_STRUCT		= "struct"		;
 	private static final String KEYWORD_UNIFORM		= "uniform"		;
-	private static final char UNIFORM_PREFIX_TRANSFORM			= 'T';
-	private static final char UNIFORM_PREFIX_RENDERING_ENGINE	= 'R';
-	private static final char UNIFORM_PREFIX_MATERIAL			= 'M';
-	private static final char UNIFORM_PREFIX_CAMERA				= 'C';
+	
+	public static class UnisetCommandGroups
+	{
+		public static final String CAMERA		= "camera";
+		public static final String TRANSFORM	= "transform";
+		public static final String RENDERING 	= "rendering";
+		public static final String MATERIAL		= "material";
 
-	private static final String UNIFORM_KEY_TRANSFORM_WORLD_MATRIX					= "WORLDMATRIX";
-	private static final String UNIFORM_KEY_TRANSFORM_PROJECTED_MATRIX				= "PROJECTEDMATRIX";
-	private static final String UNIFORM_KEY_RENDERING_ENGINE_LIGHT					= "CURRENTLIGHT";
-	private static final String UNIFORM_KEY_RENDERING_ENGINE_SAMPLER2D				= "SAMPLER2D";
-	private static final String UNIFORM_KEY_CAMERA_EYEPOS							= "CAMERAPOS";
+		public static class Camera
+		{
+			public static final String POSITION 				= "position";
+		}
+		
+		public static class Transform
+		{
+			public static final String WORLDMATRIX 		= "world_matrix";
+			public static final String PROJECTEDMATRIX	= "projected_matrix";
+		}
+
+		public static class Rendering
+		{
+			public static final String LIGHT_DIRECTIONAL	= "directional_light";
+			public static final String LIGHT_POINT			= "point_light";
+			public static final String LIGHT_SPOT			= "spot_light";
+		}
+	}
+
+	public static class UnisetCommandTypes
+	{
+		public static final String FLOAT		= "float";
+		public static final String SAMPLER2D	= "texture";
+		public static final String VECTOR3F		= "vec3";
+	}
+	
+	private class UnisetCommand
+	{
+		
+		
+		private String group;
+		private String argument;
+		private String type;
+		
+		public UnisetCommand(String group, String argument, String type)
+		{
+			this.group = group;
+			this.argument = argument;
+			this.type = type;
+		}
+
+		public String getGroup() {
+			return group;
+		}
+
+		public String getArgument() {
+			return argument;
+		}
+
+		public String getType() {
+			return type;
+		}
+	}
 	
 	private int program;
-	
+
+	private HashMap<String, UnisetCommand> unisetInstructions;
 	private HashMap<String, GLSLUniformContainer> uniforms;
 	private HashMap<String, String> abstractUniforms;
 	
@@ -91,6 +137,7 @@ public class Shader
 	{
 		program = glCreateProgram();
 		uniforms = new HashMap<String, GLSLUniformContainer>();
+		unisetInstructions = new HashMap<String, UnisetCommand>();
 		abstractUniforms = new HashMap<String, String>();
 		
 		if (program == 0x0)
@@ -108,95 +155,87 @@ public class Shader
 		Matrix4f projectedMatrix = renderingEngine.getMainCamera().getViewProjection().mul(worldMatrix);
 
 		for (String uniformName : abstractUniforms.keySet())
-			if (uniformName.charAt(1) == '_')
+			if (unisetInstructions.containsKey(uniformName))
 			{
-				String type = abstractUniforms.get(uniformName);
-				char PREFIX = uniformName.charAt(0);
-				String[] parts = uniformName.split("_");
-				String name = parts[1];
+				UnisetCommand unisetCommand = unisetInstructions.get(uniformName);
 				
-				switch (PREFIX)
+				switch (unisetCommand.getGroup())
 				{
-					case UNIFORM_PREFIX_TRANSFORM:
-						switch (name)
+					case UnisetCommandGroups.CAMERA:
+						switch (unisetCommand.getArgument())
 						{
-							case UNIFORM_KEY_TRANSFORM_WORLD_MATRIX:
-								setUniform(uniformName, worldMatrix);
-								break;
-							case UNIFORM_KEY_TRANSFORM_PROJECTED_MATRIX:
-								setUniform(uniformName, projectedMatrix);
+							case UnisetCommandGroups.Camera.POSITION:
+								setUniform(uniformName, renderingEngine.getMainCamera().getGameObject().getTransformedTranslation());
 								break;
 							default:
-								Debug.Error(uniformName + ": Unknown transform directive: " + name);
+								Debug.Error(uniformName + ": Illigal uniset command!");
 						}
 						break;
-					case UNIFORM_PREFIX_RENDERING_ENGINE:
-						switch (name)
+					case UnisetCommandGroups.TRANSFORM:
+						switch (unisetCommand.getArgument())
 						{
-							case UNIFORM_KEY_RENDERING_ENGINE_SAMPLER2D:
-								if (parts.length < 3)
-									Debug.Error(uniformName + ": Invalid uniform name! Please specify the texture name in the third segment.");
-								
-								Integer samplerSlot = renderingEngine.getSamplerSlot(parts[2]);
-								Texture texture = material.getTexture(parts[2]);
+							case UnisetCommandGroups.Transform.PROJECTEDMATRIX:
+								setUniform(uniformName, projectedMatrix);
+								break;
+							case UnisetCommandGroups.Transform.WORLDMATRIX:
+								setUniform(uniformName, worldMatrix);
+								break;
+							default:
+								Debug.Error(uniformName + ": Illigal uniset command!");
+						}
+						break;
+					case UnisetCommandGroups.RENDERING:
+						switch (unisetCommand.getArgument())
+						{
+							case UnisetCommandGroups.Rendering.LIGHT_DIRECTIONAL:
+								setUniformDirectionalLight(uniformName, (DirectionalLight)renderingEngine.getActiveLight());
+								break;
+							case UnisetCommandGroups.Rendering.LIGHT_POINT:
+								setUniformPointLight(uniformName, (PointLight)renderingEngine.getActiveLight());
+								break;
+							case UnisetCommandGroups.Rendering.LIGHT_SPOT:
+								setUniformSpotLight(uniformName, (SpotLight)renderingEngine.getActiveLight());
+								break;
+							default:
+								switch (unisetCommand.getType())
+								{
+									case UnisetCommandTypes.VECTOR3F:
+										setUniform(uniformName, renderingEngine.getVector3f(unisetCommand.getArgument()));
+										break;
+									case UnisetCommandTypes.FLOAT:
+										setUniformf(uniformName, renderingEngine.getFloat(unisetCommand.getArgument()));
+										break;
+									default:
+										Debug.Error(uniformName + ": Uniforms type is not supperted in RenderingEngine (" + unisetCommand.getType() + ")");
+								}
+								break;
+						}
+						break;
+					case UnisetCommandGroups.MATERIAL:
+						switch (unisetCommand.getType())
+						{
+							case UnisetCommandTypes.VECTOR3F:
+								setUniform(uniformName, material.getVector3f(unisetCommand.getArgument()));
+								break;
+							case UnisetCommandTypes.FLOAT:
+								setUniformf(uniformName, material.getFloat(unisetCommand.getArgument()));
+								break;
+							case UnisetCommandTypes.SAMPLER2D:
+								Integer samplerSlot = renderingEngine.getSamplerSlot(unisetCommand.getArgument());
+								Texture texture = material.getTexture(unisetCommand.getArgument());
 								if (texture == null)
-									Debug.Error(uniformName + ": Texture could not be found! (" + parts[2] + ")");
+									Debug.Error(uniformName + ": Texture could not be found! (" + unisetCommand.getArgument() + ")");
 								
 								texture.bind(samplerSlot);
 								
 								setUniformi(uniformName, samplerSlot);
 								break;
-							case UNIFORM_KEY_RENDERING_ENGINE_LIGHT:
-								switch (type)
-								{
-									case STRUCT_DIRECTIONAL:
-										setUniformDirectionalLight(uniformName, (DirectionalLight)renderingEngine.getActiveLight());
-										break;
-									case STRUCT_POINT:
-										setUniformPointLight(uniformName, (PointLight)renderingEngine.getActiveLight());
-										break;
-									case STRUCT_SPOT:
-										setUniformSpotLight(uniformName, (SpotLight)renderingEngine.getActiveLight());
-										break;
-								}
-								break;
 							default:
-								switch (type)
-								{
-									case KEYWORD_VEC3:
-										setUniform(uniformName, renderingEngine.getVector3f(name));
-										break;
-									case KEYWORD_FLOAT:
-										setUniformf(uniformName, renderingEngine.getFloat(name));
-										break;
-									default:
-										Debug.Error(uniformName + ": Uniforms type is not supperted by the Rendering Engine (" + type + ")");
-								}
+								Debug.Error(uniformName + ": Uniforms type is not supperted in Material (" + unisetCommand.getType() + ")");
 						}
 						break;
-					case UNIFORM_PREFIX_CAMERA:
-						switch (name)
-						{
-							case UNIFORM_KEY_CAMERA_EYEPOS:
-								setUniform(uniformName, renderingEngine.getMainCamera().getGameObject().getTransformedTranslation());
-								break;
-							default:
-								Debug.Error(uniformName + ": Unknown camera directive: " + name);
-						}
-						break;
-					case UNIFORM_PREFIX_MATERIAL:
-						switch (type)
-						{
-							case KEYWORD_VEC3:
-								setUniform(uniformName, material.getVector3f(name));
-								break;
-							case KEYWORD_FLOAT:
-								setUniformf(uniformName, material.getFloat(name));
-								break;
-							default:
-								Debug.Error(uniformName + ": Uniforms type is not supperted in Material (" + type + ")");
-						}
-						break;
+					default:
+						Debug.Error(uniformName + ": Illigal uniset command!");
 				}
 			}
 	}
@@ -350,23 +389,49 @@ public class Shader
 		}
 	}
 	
-	public void addUniform(String uniform, String type)
-	{
+	private String removeAndRegisterUniset(String text)
+	{      
+		final String pattern = "((?i)#uniset)\\s+([A-Za-z0-9_-]+)\\s+([A-Za-z0-9_:-]+)([\\r\\t\\t ]+)?\\n";
+		//ABOVE REGEX equals any #uniset   var    bla (with uniset case insensitve)
+		
+		Pattern p = Pattern.compile(pattern);
+	    Matcher m = p.matcher(text);
+	    
+	    while (m.find())
+	    {
+	    	String[] argsParts = m.group(3).split(":");
+	    	if (argsParts.length > 3)
+	    		Debug.Error("Uniset argument consists of more than three parts!");
+	    	if (argsParts.length < 2)
+	    		Debug.Error("Uniset argument consists of less than two arguments!");
+	    	
+	    	unisetInstructions.put(m.group(2), new UnisetCommand(
+	    			argsParts[0], argsParts[1],
+	    	    	argsParts.length > 2 ? argsParts[2] : null));
+	    }
+	    
+		return text.replaceAll(pattern, "");
 	}
 	
 	public void addVertexShader(String text)
 	{
+		text = removeAndRegisterUniset(text);
 		addProgram(text, GL_VERTEX_SHADER);
+		addAllAttrubutes(text);
 	}
 	
 	public void addGeometryShader(String text)
 	{
+		text = removeAndRegisterUniset(text);
 		addProgram(text, GL_GEOMETRY_SHADER);
+		addAllAttrubutes(text);
 	}
 	
 	public void addFragmentShader(String text)
 	{
+		text = removeAndRegisterUniset(text);
 		addProgram(text, GL_FRAGMENT_SHADER);
+		addAllAttrubutes(text);
 	}
 	
 	public void setAttribLocation(String attributeName, int location)

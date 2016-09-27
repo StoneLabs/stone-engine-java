@@ -6,6 +6,10 @@ uniform vec3 C_CAMERAPOS_eyepos;
 uniform float M_specularIntensity;
 uniform float M_specularExponent;
 
+#uniset C_CAMERAPOS_eyepos camera:position
+#uniset M_specularIntensity material:specularIntensity:float
+#uniset M_specularExponent material:specularExponent:float
+
 struct BaseLight
 {
 	vec3 color;

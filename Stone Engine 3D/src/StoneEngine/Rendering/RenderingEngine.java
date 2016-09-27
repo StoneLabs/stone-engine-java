@@ -121,14 +121,14 @@ public class RenderingEngine
 	{ 
 		Vector3f ret = vector3fHashMap.get(name);
 		if (ret == null)
-			return Vector3f.NULL();
+			Debug.Error(name + ": Vector3f not found in renderingEngine!");
 		return ret;
 	}
 	public Float getFloat(String name)
 	{ 
 		Float ret = floatHashMap.get(name);
 		if (ret == null)
-			return 0f;
+			Debug.Error(name + ": Float not found in renderingEngine!");
 		return ret;
 	}
 	

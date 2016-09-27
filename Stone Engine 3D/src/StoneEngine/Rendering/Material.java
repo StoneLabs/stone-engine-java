@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import StoneEngine.Math.Vector3f;
 import StoneEngine.ResourceLoader.Textures.Texture;
+import StoneLabs.sutil.Debug;
 
 public class Material
 {
@@ -26,21 +27,21 @@ public class Material
 	{ 
 		Texture ret = textureHashMap.get(name);
 		if (ret == null)
-			return null;
+			Debug.Error(name + ": Texture not found in renderingEngine!");
 		return ret;
 	}
 	public Vector3f getVector3f (String name)
 	{ 
 		Vector3f ret = vector3fHashMap.get(name);
 		if (ret == null)
-			return Vector3f.NULL();
+			Debug.Error(name + ": Vector3f not found in renderingEngine!");
 		return ret;
 	}
 	public Float getFloat(String name)
 	{ 
 		Float ret = floatHashMap.get(name);
 		if (ret == null)
-			return 0f;
+			Debug.Error(name + ": Float not found in renderingEngine!");
 		return ret;
 	}
 }

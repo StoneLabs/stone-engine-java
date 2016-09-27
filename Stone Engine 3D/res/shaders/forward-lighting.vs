@@ -10,7 +10,10 @@ varying vec3 worldPos0;
 varying mat3 tbnMatrix0;
 
 uniform mat4 T_WORLDMATRIX; //ALIAS MODEL MATRIX
+#uniset T_WORLDMATRIX transform:world_matrix
+
 uniform mat4 T_PROJECTEDMATRIX; //ALIAS PROJECTED MATRIX
+#uniset T_PROJECTEDMATRIX transform:projected_matrix
 
 void main()
 {

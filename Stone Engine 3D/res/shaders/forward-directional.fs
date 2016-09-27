@@ -2,11 +2,12 @@
 
 #include "shaders\lighting.glh"
 
-uniform DirectionalLight R_CURRENTLIGHT_directionalLight;
+uniform DirectionalLight directionalLight;
+#uniset directionalLight rendering:directional_light
 
 vec4 calcLightingEffect(vec3 normal, vec3 worldPos)
 {
-	return calcDirectionalLight(R_CURRENTLIGHT_directionalLight, normal, worldPos);
+	return calcDirectionalLight(directionalLight, normal, worldPos);
 }
 
 #include "shaders\lightingMain.glh"

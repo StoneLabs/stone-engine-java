@@ -5,10 +5,12 @@ attribute vec2 texCoord;
 
 varying vec2 texCoord0;
 
-uniform mat4 T_PROJECTEDMATRIX_MVP;
+uniform mat4 projectedMatrix;
+
+#uniset projectedMatrix transform:projected_matrix
 
 void main()
 {
-    gl_Position = T_PROJECTEDMATRIX_MVP * vec4(position, 1.0);
+    gl_Position = projectedMatrix * vec4(position, 1.0);
     texCoord0 = texCoord;
 }

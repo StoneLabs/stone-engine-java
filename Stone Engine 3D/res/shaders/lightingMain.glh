@@ -1,5 +1,8 @@
 uniform sampler2D R_SAMPLER2D_diffuse;
+#uniset R_SAMPLER2D_diffuse material:diffuse:texture
+
 uniform sampler2D R_SAMPLER2D_normalMap;
+#uniset R_SAMPLER2D_normalMap material:normalMap:texture
 
 void main()
 {

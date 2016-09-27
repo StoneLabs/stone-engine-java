@@ -2,10 +2,13 @@
 
 varying vec2 texCoord0;
 
-uniform vec3 R_ambient;
-uniform sampler2D R_SAMPLER2D_diffuse;
+uniform vec3 ambient;
+uniform sampler2D diffuse;
+
+#uniset ambient rendering:ambient:vec3
+#uniset diffuse material:diffuse:texture
 
 void main()
 {
-	gl_FragColor = texture2D(R_SAMPLER2D_diffuse, texCoord0.xy) * vec4(R_ambient, 1);
+	gl_FragColor = texture2D(diffuse, texCoord0.xy) * vec4(ambient, 1);
 }
