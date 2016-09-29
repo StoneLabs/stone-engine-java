@@ -37,32 +37,23 @@ public class TestGame extends Game
 	@Override
 	public void init()
 	{
-		//Creating components
-		
-//		float fieldDepth = 20.0f;
-//		float fieldWidth = 20.0f;
-//
-//		Vertex[] vertices = new Vertex[] { 	new Vertex( new Vector3f(-fieldWidth, 0.0f, -fieldDepth), new Vector2f(0.0f, 0.0f)),
-//				new Vertex( new Vector3f(-fieldWidth, 0.0f, fieldDepth), new Vector2f(0.0f, 1.0f)),
-//				new Vertex( new Vector3f(fieldWidth, 0.0f, -fieldDepth), new Vector2f(1.0f, 0.0f)),
-//				new Vertex( new Vector3f(fieldWidth, 0.0f, fieldDepth), new Vector2f(1.0f, 1.0f))};
-//
-//		int indices[] = { 0, 1, 2,
-//				2, 1, 3};
-
 		Mesh mesh = ResourceLoader.loadMesh("models/plane.obj", OBJModel.class);
 		
 		Material material = new Material();
 		material.addTexture("diffuse", ResourceLoader.loadTexture("textures/test.png"));
 		material.addTexture("normalMap", ResourceLoader.loadTexture("textures/default_normal.png"));
+		material.addTexture("dispMap", ResourceLoader.loadTexture("textures/default_disp.png"));
 		material.addFloat("specularIntensity", 0.5f);
 		material.addFloat("specularExponent", 32f);
+		material.addFloat("dispMapScale", 0f);
 		
 		Material materialBricks = new Material();
 		materialBricks.addTexture("diffuse", ResourceLoader.loadTexture("textures/bricks_diffuse.jpg"));
 		materialBricks.addTexture("normalMap", ResourceLoader.loadTexture("textures/bricks_normal.jpg"));
+		materialBricks.addTexture("dispMap", ResourceLoader.loadTexture("textures/bricks_disp.jpg"));
 		materialBricks.addFloat("specularIntensity", 1f);
 		materialBricks.addFloat("specularExponent", 32f);
+		materialBricks.addFloat("dispMapScale", 0.04f);
 
 
 		MeshRenderer meshRenderer = new MeshRenderer(mesh, materialBricks);
@@ -89,8 +80,8 @@ public class TestGame extends Game
 		
 		directionalLightTest2.setTranslation(2, 0, 7);
 		directionalLightTest2.setRotation(Quaternion.rotation(new Vector3f(0,1,0), (float)Math.toRadians(90)));
-		directionalLightTest2.addComponent(pointLight1);
-		directionalLightTest2.addComponent(spotLight1);
+//		directionalLightTest2.addComponent(pointLight1);
+//		directionalLightTest2.addComponent(spotLight1);
 		
 
 		getRootObject().addChild(planeObject);

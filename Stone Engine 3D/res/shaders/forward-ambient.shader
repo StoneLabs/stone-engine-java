@@ -1,3 +1,3 @@
 #Forward ambient group:
-vs shaders\forward-ambient.vs
+vs shaders\forward-lighting.vs
 fs shaders\forward-ambient.fs

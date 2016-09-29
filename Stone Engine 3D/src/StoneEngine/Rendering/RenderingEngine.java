@@ -57,12 +57,13 @@ public class RenderingEngine
 		vector3fHashMap = new HashMap<String, Vector3f>();
 		floatHashMap = new HashMap<String, Float>();
 		
-		vector3fHashMap.put("ambient", new Vector3f(0.1f, 0.1f, 0.1f));
+		vector3fHashMap.put("ambient", new Vector3f(0.3f, 0.3f, 0.3f));
 		
 		samplerMap.put("diffuse", 0);
 		samplerMap.put("normalMap", 1);
+		samplerMap.put("dispMap", 2);
 		
-		ambientShader = ResourceLoader.loadShader("shaders\\forward-ambient.shader");
+		ambientShader = ResourceLoader.loadShader("shaders/forward-ambient.shader");
 		
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		

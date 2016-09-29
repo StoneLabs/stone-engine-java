@@ -55,7 +55,7 @@ public class OBJModel implements ResourceModel
 				else if (tokens[0].equals("vt"))
 					texCoords.add(new Vector2f(
 							Float.valueOf(tokens[1]),
-							Float.valueOf(tokens[2])
+							1.0f - Float.valueOf(tokens[2])
 							));
 				else if (tokens[0].equals("vn"))
 					normals.add(new Vector3f(

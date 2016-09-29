@@ -27,21 +27,21 @@ public class Material
 	{ 
 		Texture ret = textureHashMap.get(name);
 		if (ret == null)
-			Debug.Error(name + ": Texture not found in renderingEngine!");
+			Debug.Error(name + ": Texture not found in material!");
 		return ret;
 	}
 	public Vector3f getVector3f (String name)
 	{ 
 		Vector3f ret = vector3fHashMap.get(name);
 		if (ret == null)
-			Debug.Error(name + ": Vector3f not found in renderingEngine!");
+			Debug.Error(name + ": Vector3f not found in material!");
 		return ret;
 	}
 	public Float getFloat(String name)
 	{ 
 		Float ret = floatHashMap.get(name);
 		if (ret == null)
-			Debug.Error(name + ": Float not found in renderingEngine!");
+			Debug.Error(name + ": Float not found in material!");
 		return ret;
 	}
 }
