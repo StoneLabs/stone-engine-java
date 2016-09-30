@@ -22,7 +22,6 @@ import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glFrontFace;
 import static org.lwjgl.opengl.GL11.glGetString;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -57,7 +56,7 @@ public class RenderingEngine
 		vector3fHashMap = new HashMap<String, Vector3f>();
 		floatHashMap = new HashMap<String, Float>();
 		
-		vector3fHashMap.put("ambient", new Vector3f(0.3f, 0.3f, 0.3f));
+		vector3fHashMap.put("ambient", new Vector3f(0.1f, 0.1f, 0.1f));
 		
 		samplerMap.put("diffuse", 0);
 		samplerMap.put("normalMap", 1);
