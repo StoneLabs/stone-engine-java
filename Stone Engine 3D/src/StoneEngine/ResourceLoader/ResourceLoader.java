@@ -149,11 +149,7 @@ public class ResourceLoader
 		if (vertexShader != null)	shader.addVertexShader(vertexShader);
 		if (fragmentShader != null)	shader.addFragmentShader(fragmentShader);
 		if (geometryShader != null)	shader.addGeometryShader(geometryShader);
-
-		if (vertexShader != null)	shader.addAllAttrubutes(vertexShader);
-		if (fragmentShader != null)	shader.addAllAttrubutes(fragmentShader);
-		if (geometryShader != null)	shader.addAllAttrubutes(geometryShader);
-		
+				
 		shader.compileShader();
 		
 		if (vertexShader != null)	shader.addAllUniforms(vertexShader);

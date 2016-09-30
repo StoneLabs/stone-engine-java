@@ -23,13 +23,9 @@ public class Mesh
 	}
 	public Mesh(Vertex[] vertices, int[] indices)
 	{
-		this(vertices, indices, true);
-	}
-	public Mesh(Vertex[] vertices, int[] indices, boolean calcNormals)
-	{
 		this();
 		
-		addVertices(vertices, indices, calcNormals);
+		addVertices(vertices, indices);
 	}
 
 	@Override
@@ -38,14 +34,8 @@ public class Mesh
 		resource.removeReference();
 	}
 
-	public void addVertices(Vertex[] vertices, int[] indices)
-	{
-		addVertices(vertices, indices, false);
-	}
-	public void addVertices(Vertex[] vertices, int[] indices, boolean calcNormals)
-	{
-		if (calcNormals) calcNormals(vertices, indices);
-		
+	private void addVertices(Vertex[] vertices, int[] indices)
+	{		
 		resource.setSize(indices.length);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, resource.getVbo());
@@ -60,11 +50,13 @@ public class Mesh
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
+		glEnableVertexAttribArray(3);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, resource.getVbo());
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * 4, 0);  //pos
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, Vertex.SIZE * 4, 12); //texCoord: 4*float = 4*3bytes = 12b
-		glVertexAttribPointer(2, 3, GL_FLOAT, false, Vertex.SIZE * 4, 20); //normals: 8b + 12
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * 4, 0);  //pos 		(OFFSET: 0 ; SIZE = 3*float = 12b)
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, Vertex.SIZE * 4, 12); //texCoord	(OFFSET: 12; SIZE = 2*float = 8b )
+		glVertexAttribPointer(2, 3, GL_FLOAT, false, Vertex.SIZE * 4, 20); //nomals		(OFFSET: 20; SIZE = 3*float = 12b)
+		glVertexAttribPointer(3, 3, GL_FLOAT, false, Vertex.SIZE * 4, 32); //tangent	(OFFSET: 32; SIZE = 3*float = 12b)
 		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource.getIbo());
 		glDrawElements(GL_TRIANGLES, resource.getSize(), GL_UNSIGNED_INT, 0);
@@ -72,28 +64,7 @@ public class Mesh
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(2);
-	}
-	
-	private void calcNormals(Vertex[] vertices, int[] indices)
-	{
-		for (int i = 0; i < indices.length; i += 3)
-		{
-			int i0 = indices[i];
-			int i1 = indices[i+1];
-			int i2 = indices[i+2];
-			
-			Vector3f v1 = vertices[i1].getPos().sub(vertices[i0].getPos());
-			Vector3f v2 = vertices[i2].getPos().sub(vertices[i0].getPos());
-			
-			Vector3f normal = v1.cross(v2).normalize();
-			
-			vertices[i0].setNormal(vertices[i0].getNormal().add(normal));
-			vertices[i1].setNormal(vertices[i1].getNormal().add(normal));
-			vertices[i2].setNormal(vertices[i2].getNormal().add(normal));
-		}
-		
-		for (int i = 0; i < vertices.length; i++)
-			vertices[i].setNormal(vertices[i].getNormal().normalize());
+		glDisableVertexAttribArray(3);
 	}
 	
 	public MeshResource getBuffers() { return resource; }

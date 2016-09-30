@@ -22,7 +22,6 @@ import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL11.glFrontFace;
 import static org.lwjgl.opengl.GL11.glGetString;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -49,6 +48,8 @@ public class RenderingEngine
 
 	public RenderingEngine()
 	{
+		Debug.Log("OpenGL " + RenderingEngine.getOpenGLVersion());
+		
 		lights = new ArrayList<BaseLight>();
 		samplerMap = new HashMap<String, Integer>();
 
@@ -58,10 +59,10 @@ public class RenderingEngine
 		vector3fHashMap.put("ambient", new Vector3f(0.1f, 0.1f, 0.1f));
 		
 		samplerMap.put("diffuse", 0);
+		samplerMap.put("normalMap", 1);
+		samplerMap.put("dispMap", 2);
 		
-		ambientShader = ResourceLoader.loadShader("shaders\\forward-ambient.shader");
-		
-		Debug.Log("OpenGL " + RenderingEngine.getOpenGLVersion());
+		ambientShader = ResourceLoader.loadShader("shaders/forward-ambient.shader");
 		
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		
@@ -103,7 +104,11 @@ public class RenderingEngine
 		}
 	}
 
-	public int getSamplerSlot(String samplerName) { return samplerMap.get(samplerName); }
+	public int getSamplerSlot(String samplerName) 
+	{ 
+		if (!samplerMap.containsKey(samplerName)) Debug.Error("Sampler slot could not be found: " + samplerName);
+		return samplerMap.get(samplerName); 
+	}
 	
 	public static String getOpenGLVersion()	{ return glGetString(GL_VERSION); }
 	public Camera getMainCamera()			{ return mainCamera; }	
@@ -116,14 +121,14 @@ public class RenderingEngine
 	{ 
 		Vector3f ret = vector3fHashMap.get(name);
 		if (ret == null)
-			return Vector3f.NULL();
+			Debug.Error(name + ": Vector3f not found in renderingEngine!");
 		return ret;
 	}
 	public Float getFloat(String name)
 	{ 
 		Float ret = floatHashMap.get(name);
 		if (ret == null)
-			return 0f;
+			Debug.Error(name + ": Float not found in renderingEngine!");
 		return ret;
 	}
 	

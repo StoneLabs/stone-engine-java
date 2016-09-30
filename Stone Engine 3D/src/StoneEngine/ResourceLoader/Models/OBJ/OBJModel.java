@@ -8,6 +8,7 @@ import java.util.HashMap;
 import StoneEngine.Core.Util;
 import StoneEngine.ResourceLoader.Models.IndexedModel;
 import StoneEngine.ResourceLoader.Models.ResourceModel;
+import StoneLabs.sutil.Debug;
 import StoneEngine.Math.Vector2f;
 import StoneEngine.Math.Vector3f;
 
@@ -54,7 +55,7 @@ public class OBJModel implements ResourceModel
 				else if (tokens[0].equals("vt"))
 					texCoords.add(new Vector2f(
 							Float.valueOf(tokens[1]),
-							Float.valueOf(tokens[2])
+							1.0f - Float.valueOf(tokens[2])
 							));
 				else if (tokens[0].equals("vn"))
 					normals.add(new Vector3f(
@@ -156,6 +157,7 @@ public class OBJModel implements ResourceModel
 				
 				normalModel.getPositions().add(currentPosition);
 				normalModel.getTexCoords().add(currentTexCoord);
+				normalModel.getTangents().add(Vector3f.NULL()); //Default tangent
 				normalModel.getNormals().add(currentNormal);
 			}
 			
@@ -164,14 +166,19 @@ public class OBJModel implements ResourceModel
 			indexMap.put(modelVertexIndex, normalModelIndex);
 		}
 		
-		if (!hasNormals)
+		if (!hasNormals) //calc normals
 		{
-			normalModel.calcNormals();
+			normalModel.calcNormals(); //on the normal model
 			
 			for (int i = 0; i < result.getPositions().size(); i++)
-				result.getNormals().add(normalModel.getNormals().get(indexMap.get(i)));
+				result.getNormals().add(normalModel.getNormals().get(indexMap.get(i))); //add them back to result mesh
 		}
 		
+		normalModel.calcTangents(); //calc tangents on the normal model
+		
+		for (int i = 0; i < result.getPositions().size(); i++) //add them back to result mesh
+			result.getTangents().add(normalModel.getTangents().get(indexMap.get(i)));
+				
 		return result;
 	}
 }
